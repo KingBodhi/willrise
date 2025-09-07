@@ -63,7 +63,7 @@ export default function Navbar() {
               {NAV_LINKS.map((l) => (
                 <div key={l.href} className="px-4">
                   <Link href={l.href} onClick={() => setOpen(false)} className="block py-3 text-lg tracking-[0.2em]">
-                    {l.label.upper?.() || l.label.toUpperCase()}
+                    {l.label.toUpperCase()}
                   </Link>
                   <div className="mx-auto h-px w-40 bg-white/10"></div>
                 </div>
