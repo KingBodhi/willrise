@@ -1,28 +1,15 @@
-# Willrise Unlimited — Licensing Site (Next.js 14)
+# Willrise Unlimited — Next.js 14 + Tailwind
 
-**Fonts:** Mokoto (display) and Bicubik (body). Add WOFF2 files to `public/fonts` and update `styles/globals.css` @font-face src URLs.
-
-**Brand colors**
-- Midnight `#010b19`
-- Deep Navy `#021631`
-- Signal Blue `#042c62`
-- Alloy `#c0c0c0`
-
-## Develop
+## Quickstart
 ```bash
+nvm use 20   # optional
 npm install
 npm run dev
 ```
 
 ## Routes
-- `/` Home
-- `/military` `/construction` `/pleasure`
-- `/patents` `/licensing` `/videos` `/contact`
-- `/blog` `/blog/[slug]`
+/, /military, /construction, /pleasure, /patents, /licensing, /videos, /blog, /contact
 
-## Blog
-Posts are defined in `content/blog/posts.ts` for simplicity (no CMS).
-Replace with MDX or a headless CMS later.
-
-## Lead handling
-`/api/contact` currently logs to server console. Wire to your email/CRM when ready.
+## Notes
+- Fonts Mokoto (display) & Bicubik (body) are referenced via `@font-face` and should be added to `public/fonts` when available.
+- Landing page includes: hero, certifications marquee, explainer video, dangers header, kinetic section, applications cards, blog preview, and generic contact form.

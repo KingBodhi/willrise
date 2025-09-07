@@ -2,18 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
-:root { color-scheme: light dark; }
-html, body { height: 100%; }
 body { @apply bg-white text-midnight dark:bg-black dark:text-white; }
 
-/* Placeholder font-face declarations: replace src with hosted WOFF2s when available */
 @font-face {
   font-family: 'Mokoto';
-  src: local('Mokoto'); /* TODO: add url('/fonts/Mokoto.woff2') format('woff2') */
+  src: local('Mokoto');
   font-display: swap;
 }
 @font-face {
   font-family: 'Bicubik';
-  src: local('Bicubik'); /* TODO: add url('/fonts/Bicubik.woff2') format('woff2') */
+  src: local('Bicubik');
   font-display: swap;
 }

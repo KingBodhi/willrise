@@ -12,8 +12,7 @@ const config: Config = {
       fontFamily: {
         mokoto: ["Mokoto", "Bicubik", "system-ui", "Arial"],
         bicubik: ["Bicubik", "system-ui", "Arial"]
-      },
-      borderRadius: { xl2: "1.25rem" }
+      }
     }
   },
   plugins: []

@@ -1,9 +1,1 @@
-import Section from "@/components/Section";
-import LeadForm from "@/components/LeadForm";
-export default function Page(){
-  return (
-    <Section title="Get in touch" subtitle="We’ll send an NDA and the full technical packet.">
-      <LeadForm />
-    </Section>
-  )
-}
+import Section from '@/components/Section'; import LeadForm from '@/components/LeadForm'; export default function Page(){ return (<Section title='Contact Us' center subtitle='Send us a note about your application or questions. We’ll respond shortly.'><div className='max-w-2xl mx-auto'><LeadForm /></div></Section>);}
