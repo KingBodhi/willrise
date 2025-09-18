@@ -17,11 +17,11 @@
     "isolatedModules": true,
     "jsx": "preserve",
     "incremental": true,
-    "baseUrl": ".",
+    "baseUrl": "./",
     "paths": {
-      "@/*": [
-        "./*"
-      ]
+      "@/*": ["./*"]
+  
+
     },
     "plugins": [
       {
@@ -39,3 +39,4 @@
     "node_modules"
   ]
 }
+
