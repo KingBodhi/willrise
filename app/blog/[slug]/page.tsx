@@ -1,21 +1,15 @@
-import Section from "@/components/Section";
-import { getPost } from "@/content/blog/posts";
-import { notFound } from "next/navigation";
+import Section from "../../../components/Section";
+import { getPost } from "../../../content/blog/posts";
+
 export default function Page({ params }:{ params:{ slug:string }}){
   const post = getPost(params.slug);
-  if(!post) return notFound();
-  return (
-    <Section title={post.title} center subtitle={`${post.date} • ${post.tags.join(", ")}`}>
-        {post.image && (
-          <div className="mb-6 overflow-hidden rounded-xl border border-alloy/40">
-            <div className="aspect-[16/9] w-full bg-neutral-100 dark:bg-neutral-900">
-              <img src={post.image} alt={post.title} className="h-full w-full object-cover" />
-            </div>
-          </div>
-        )}
-      <article className="prose max-w-none prose-neutral dark:prose-invert">
-        <div dangerouslySetInnerHTML={{ __html: post.body }} />
-      </article>
-    </Section>
-  );
+  if(!post) return <Section center title="Not found"><p>Post not found.</p></Section>;
+  return (<Section>
+    <article className="mx-auto max-w-3xl">
+      {post.image && <div className="mb-6 aspect-[16/9] overflow-hidden rounded-xl border border-alloy/40"><img src={post.image} alt={post.title} className="h-full w-full object-cover"/></div>}
+      <h1 className="font-mokoto text-3xl mb-2">{post.title}</h1>
+      <div className="text-sm opacity-70 mb-6">{post.date}</div>
+      <div className="prose prose-neutral dark:prose-invert max-w-none" dangerouslySetInnerHTML={{ __html: post.body }} />
+    </article>
+  </Section>);
 }

@@ -1,15 +1,22 @@
-# Willrise Unlimited — Next.js 14 + Tailwind
+# Willrise Unlimited — MVP (Next.js 14 + Prisma SQLite + Stripe)
 
-## Quickstart
+## Setup
 ```bash
-nvm use 20   # optional
+nvm use 20
+cp .env.example .env       # already filled with Stripe TEST keys
 npm install
+npx prisma generate
+npm run db:push
+npm run seed
 npm run dev
 ```
 
-## Routes
-/, /military, /construction, /pleasure, /patents, /licensing, /videos, /blog, /contact
+- Status: `/status`
+- Shop: `/shop`, Collections: `/collection/[handle]`, PDP: `/product/[handle]`, Cart: `/cart`
+- Admin login: `/admin/login` (uses ADMIN_EMAIL / ADMIN_PASSWORD in .env)
+- Admin dashboard: `/admin` (protected)
+- Admin products: `/admin/products`
 
 ## Notes
-- Fonts Mokoto (display) & Bicubik (body) are referenced via `@font-face` and should be added to `public/fonts` when available.
-- Landing page includes: hero, certifications marquee, explainer video, dangers header, kinetic section, applications cards, blog preview, and generic contact form.
+- SQLite for local dev. For production, switch to Postgres and we can restore JSON columns and role enums.
+- Stripe keys here are TEST keys; use Stripe test cards like 4242 4242 4242 4242.

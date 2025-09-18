@@ -1,0 +1,1 @@
+import { prisma } from '@/lib/prisma'; export async function GET(_:Request,{params}:{params:{handle:string}}){ const p=await prisma.product.findUnique({ where:{ handle:params.handle }, include:{ images:true, variants:{ include:{ inventory:true } } } }); if(!p) return new Response('Not found',{status:404}); return Response.json(p); }

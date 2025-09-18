@@ -1,1 +1,9 @@
-import Section from '@/components/Section'; export default function Page(){ return (<Section title='Patents (Pending)' subtitle='Public, non-enabling summary. Full specs available under NDA (upon request).'><ul className='list-disc pl-6 space-y-2'><li>Dynamic thigh–seat redistribution.</li><li>Ventral bias control.</li><li>Integrated suspension-relief stance loops.</li></ul></Section>);}
+import Section from "../../components/Section";
+export default function Page(){
+  return (<Section center title="Patents" subtitle="Design and utility patents pending.">
+    <div className="mx-auto max-w-3xl text-neutral-700 dark:text-neutral-300 space-y-4">
+      <p>Our core geometry and specific harness implementations are protected by pending design and utility filings. For detailed claims and status, approved licensees receive document access.</p>
+      <p>All product names and marks are the property of their respective owners. © Willrise Unlimited.</p>
+    </div>
+  </Section>);
+}

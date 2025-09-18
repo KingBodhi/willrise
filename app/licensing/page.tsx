@@ -1,15 +1,13 @@
-import Section from "@/components/Section";
+import Section from "../../components/Section";
+import Link from "next/link";
+
 export default function Page(){
   return (<>
-    <Section title="Licensing Options" center subtitle="Flexible structures for OEMs and safety brands.">
-      <div className="grid gap-6 md:grid-cols-3">
-        {[["Exclusive by Vertical","Secure competitive moat within your industry segment."],
-          ["Non-exclusive by Region","Accelerate adoption with regional rights."],
-          ["Tech Transfer Support","On-site integration, QA, and training packages."]].map(([t,s])=> (
-            <div key={t} className="rounded-xl border border-alloy/40 p-5">
-              <div className="font-medium">{t}</div><p className="text-sm opacity-80">{s}</p>
-            </div>
-        ))}
+    <Section center title="Licensing" subtitle="We license the kinetic fall-arrest platform across application classes.">
+      <div className="mx-auto max-w-3xl text-neutral-700 dark:text-neutral-300 space-y-4">
+        <p>We offer IP licensing and co-development agreements for military, construction, and recreational equipment partners. Reach out with market details and timeline, and our team will respond with next steps.</p>
+        <p>Licensing packages include technical documentation under NDA, integration guidance, and access to our test data.</p>
+        <div className="pt-4"><Link href="/contact" className="inline-flex items-center rounded bg-signal px-4 py-2 text-white">Contact Us</Link></div>
       </div>
     </Section>
   </>);

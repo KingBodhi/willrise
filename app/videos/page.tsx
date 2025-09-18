@@ -1,1 +1,0 @@
-import Section from '@/components/Section'; export default function Page(){ return (<Section title='Video Evidence' center subtitle='Demonstrations and comparisons.'><div className='rounded-xl border border-alloy/40 p-5 text-center'>Placeholder video hub.</div></Section>);}
