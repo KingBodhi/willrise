@@ -1,4 +1,5 @@
 import { prisma } from '@/lib/prisma';
+import Link from "next/link";
 
 async function getAnalyticsData() {
   try {

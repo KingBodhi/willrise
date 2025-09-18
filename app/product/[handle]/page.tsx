@@ -83,7 +83,7 @@ export default function Page({ params }:{ params:{ handle:string }}){
             "@type": "Product",
             "name": data.title,
             "description": data.description,
-            "image": data.images?.map((img) => img.url) || [],
+            "image": data.images?.map((img: {url: string}) => img.url) || [],
             "sku": data.variants?.[0]?.sku || "",
             "brand": {
               "@type": "Brand",
@@ -158,7 +158,7 @@ export default function Page({ params }:{ params:{ handle:string }}){
             "@type": "Product",
             "name": data.title,
             "description": data.description,
-            "image": data.images?.map((img) => img.url) || [],
+            "image": data.images?.map((img: {url: string}) => img.url) || [],
             "sku": data.variants?.[0]?.sku || "",
             "brand": {
               "@type": "Brand",

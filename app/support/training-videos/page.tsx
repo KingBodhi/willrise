@@ -1,5 +1,5 @@
 
-import Section from "../../components/Section";
+import Section from "@/components/Section";
 import Link from "next/link";
 
 export default function TrainingVideosPage() {
