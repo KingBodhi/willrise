@@ -5,7 +5,7 @@ import useSWR from "swr";
 
 // Updated navigation focused on conversion
 const NAV_LINKS = [
-  { label: "Solutions", href: "/solutions" }, // Changed from /shop
+  { label: "Solutions", href: "/solutions" },
   { label: "Safety Standards", href: "/compliance" },
   { label: "Support", href: "/support" },
 ] as const;
@@ -103,13 +103,17 @@ export default function Navbar(){
 
       {open && (
         <div className="fixed inset-0 z-50 md:hidden">
-          <div className="fixed inset-0 bg-black/50" onClick={()=>setOpen(false)} />
-          <div className="fixed right-0 top-0 h-full w-80 max-w-full bg-primary-600 shadow-strong">
-            <div className="flex items-center justify-between p-6 border-b border-white/10">
+          <div 
+            className="fixed inset-0 bg-black/60 backdrop-blur-sm" 
+            onClick={() => setOpen(false)}
+            onTouchEnd={() => setOpen(false)}
+          />
+          <div className="fixed right-0 top-0 h-full w-80 max-w-[90vw] bg-white shadow-2xl border-l border-neutral-200">
+            <div className="flex items-center justify-between p-6 border-b border-neutral-200 bg-primary-600 text-white">
               <div className="font-display text-lg font-bold">WILLRISE</div>
               <button 
                 onClick={()=>setOpen(false)} 
-                className="p-2 rounded-lg hover:bg-white/10 transition-colors" 
+                className="p-2 rounded-lg hover:bg-white/20 transition-colors" 
                 aria-label="Close menu"
               >
                 <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -118,24 +122,30 @@ export default function Navbar(){
               </button>
             </div>
             
-            <nav className="p-6 space-y-6">
+            <nav className="p-6 space-y-2 bg-white text-primary-600">
               {NAV_LINKS.map(link => (
                 <Link 
                   key={link.href} 
                   href={link.href} 
                   onClick={()=>setOpen(false)}
-                  className="block text-lg font-medium hover:text-accent-500 transition-colors"
+                  className="block px-4 py-3 text-lg font-medium hover:bg-primary-50 hover:text-accent-500 rounded-lg transition-all"
                 >
                   {link.label}
                 </Link>
               ))}
               
-              <div className="pt-4 border-t border-white/10 space-y-4">
-                <a href="tel:+1-800-WILLRISE" className="flex items-center gap-3 text-base font-medium">
+              <div className="pt-4 border-t border-neutral-200 space-y-3">
+                <a 
+                  href="tel:+1-800-WILLRISE" 
+                  className="flex items-center gap-3 px-4 py-3 text-base font-medium text-primary-600 hover:bg-primary-50 rounded-lg transition-colors"
+                >
                   <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                   </svg>
-                  1-800-WILLRISE
+                  <div>
+                    <div className="font-semibold">1-800-WILLRISE</div>
+                    <div className="text-sm text-primary-500">Mon-Fri 7AM-6PM EST</div>
+                  </div>
                 </a>
                 
                 <Link 

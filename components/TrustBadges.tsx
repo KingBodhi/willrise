@@ -5,7 +5,7 @@ interface TrustBadgesProps {
   className?: string;
 }
 
-export default function TrustBadges({ certifications = ['ansi_z359_1', 'osha', 'ce'], className = '' }: TrustBadgesProps) {
+export default function TrustBadges({ certifications = ['ansi_z359_1', 'osha', 'csa', 'made_in_usa'], className = '' }: TrustBadgesProps) {
   if (!certifications || certifications.length === 0) {
     return null;
   }

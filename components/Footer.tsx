@@ -4,7 +4,7 @@ const footerLinks = {
   products: [
     { name: "Construction Harnesses", href: "/collection/construction" },
     { name: "Military & Tactical", href: "/collection/military" },
-    { name: "Recreation & Sports", href: "/collection/pleasure" },
+    { name: "Recreation & Sports", href: "/collection/recreation" },
     { name: "All Products", href: "/shop" }
   ],
   company: [

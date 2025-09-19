@@ -127,22 +127,22 @@ function HeroSection() {
           <div className="flex w-[200%] animate-marquee">
             <div className="flex w-1/2 whitespace-nowrap">
               {CERT_LOGOS.map((src, i) => (
-                <div key={`a-${i}`} className="flex min-w-[20%] items-center justify-center px-8">
+                <div key={`a-${i}`} className="flex min-w-[20%] items-center justify-center px-4 sm:px-8">
                   <img 
                     src={src} 
                     alt="Certification logo" 
-                    className="h-12 md:h-16 w-auto opacity-50 hover:opacity-100 transition-opacity" 
+                    className="h-16 md:h-20 w-auto opacity-50 hover:opacity-100 transition-opacity" 
                   />
                 </div>
               ))}
             </div>
             <div className="flex w-1/2 whitespace-nowrap">
               {CERT_LOGOS.map((src, i) => (
-                <div key={`b-${i}`} className="flex min-w-[20%] items-center justify-center px-8">
+                <div key={`b-${i}`} className="flex min-w-[20%] items-center justify-center px-4 sm:px-8">
                   <img 
                     src={src} 
                     alt="Certification logo" 
-                    className="h-12 md:h-16 w-auto opacity-50 hover:opacity-100 transition-opacity" 
+                    className="h-16 md:h-20 w-auto opacity-50 hover:opacity-100 transition-opacity" 
                   />
                 </div>
               ))}
@@ -213,10 +213,10 @@ function VideoSection() {
 
 function FeaturedProduct() {
   return (
-    <Section className="bg-gradient-to-br from-accent-50 to-orange-50 py-20">
+    <Section className="bg-gradient-to-br from-primary-50 to-primary-100 py-20">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="text-center mb-12">
-          <div className="inline-flex items-center gap-2 bg-accent-100 text-accent-800 px-4 py-2 rounded-full text-sm font-semibold mb-6 border border-accent-200">
+          <div className="inline-flex items-center gap-2 bg-primary-100 text-primary-800 px-4 py-2 rounded-full text-sm font-semibold mb-6 border border-primary-200">
             <span className="text-lg">🏆</span>
             Bestseller
           </div>
@@ -236,7 +236,7 @@ function FeaturedProduct() {
                 alt="Kinetic Fall-Arrest Harness" 
                 className="w-full h-full object-cover aspect-square lg:aspect-auto"
               />
-              <div className="absolute top-4 left-4 bg-accent-500 text-white px-3 py-1 rounded-full text-sm font-bold">
+              <div className="absolute top-4 left-4 bg-primary-600 text-white px-3 py-1 rounded-full text-sm font-bold">
                 LIMITED TIME
               </div>
             </div>
@@ -253,7 +253,7 @@ function FeaturedProduct() {
                 <div className="flex items-center gap-4 mb-6">
                   <div className="text-4xl font-display font-bold text-primary-600">$399.00</div>
                   <div className="text-xl text-neutral-500 line-through">$499.00</div>
-                  <div className="bg-success-100 text-success-800 px-3 py-1 rounded-full text-sm font-bold border border-success-200">
+                  <div className="bg-primary-100 text-primary-800 px-3 py-1 rounded-full text-sm font-bold border border-primary-200">
                     Save $100
                   </div>
                 </div>
@@ -371,9 +371,9 @@ export default function Page(){
               </div>
             </Link>
             
-            <Link href="/collection/pleasure" className="group bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-neutral-200">
+            <Link href="/collection/recreation" className="group bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-neutral-200">
               <div className="aspect-[4/3] bg-gradient-to-br from-neutral-100 to-neutral-200 relative overflow-hidden">
-                <img src="/images/apps/pleasure.svg" alt="Recreational application" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+                <img src="/images/apps/recreation.svg" alt="Recreational application" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                 <div className="absolute top-4 right-4 bg-success-500 text-white px-3 py-1 rounded-full text-sm font-bold">
                   Adventure
                 </div>

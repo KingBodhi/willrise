@@ -23,8 +23,8 @@ const categories = [
   {
     title: "Recreation & Sports",
     description: "Ergonomic harnesses for climbing and adventure sports",
-    image: "/images/apps/pleasure.svg",
-    href: "/collection/pleasure", 
+    image: "/images/apps/recreation.svg",
+    href: "/collection/recreation", 
     stats: "Adventure Ready",
     features: ["Comfort Padding", "Gear Loops", "Lightweight Design"]
   }

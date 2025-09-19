@@ -12,11 +12,11 @@ body {
 
 /* FIXED FORM INPUT TEXT VISIBILITY */
 input, textarea, select {
-  @apply text-neutral-900 placeholder-neutral-500;
+  @apply text-neutral-900 placeholder-neutral-500 bg-white border-neutral-300;
 }
 
 input:focus, textarea:focus, select:focus {
-  @apply text-neutral-900;
+  @apply text-neutral-900 bg-white border-primary-500 ring-2 ring-primary-200;
 }
 
 /* Dark mode form text fixes */
@@ -26,7 +26,11 @@ input:focus, textarea:focus, select:focus {
   }
   
   input, textarea, select {
-    @apply text-neutral-100 placeholder-neutral-400 bg-neutral-800 border-neutral-600;
+    @apply text-neutral-900 placeholder-neutral-500 bg-white border-neutral-300;
+  }
+  
+  input:focus, textarea:focus, select:focus {
+    @apply text-neutral-900 bg-white border-primary-500 ring-2 ring-primary-200;
   }
 }
 
@@ -95,20 +99,20 @@ input:focus, textarea:focus, select:focus {
 }
 
 .input-field {
-  @apply border border-neutral-300 rounded-xl px-4 py-3 text-neutral-900 placeholder-neutral-500 bg-white focus:border-primary-500 focus:ring-2 focus:ring-primary-200 transition-all duration-200;
+  @apply border border-neutral-300 rounded-xl px-4 py-3 text-neutral-900 placeholder-neutral-400 bg-white focus:border-primary-500 focus:ring-2 focus:ring-primary-200 transition-all duration-200;
 }
 
 /* ADMIN SPECIFIC FORM STYLES */
 .admin-input {
-  @apply w-full px-4 py-3 border border-neutral-300 rounded-xl text-neutral-900 placeholder-neutral-500 bg-white focus:border-primary-500 focus:ring-2 focus:ring-primary-200 transition-all duration-200;
+  @apply w-full px-4 py-3 border border-neutral-300 rounded-xl text-neutral-900 placeholder-neutral-400 bg-white focus:border-primary-500 focus:ring-2 focus:ring-primary-200 transition-all duration-200;
 }
 
 .admin-select {
-  @apply px-4 py-3 border border-neutral-300 rounded-xl text-neutral-900 bg-white focus:border-primary-500 focus:ring-2 focus:ring-primary-200 transition-all duration-200;
+  @apply w-full px-4 py-3 border border-neutral-300 rounded-xl text-neutral-900 bg-white focus:border-primary-500 focus:ring-2 focus:ring-primary-200 transition-all duration-200;
 }
 
 .admin-textarea {
-  @apply w-full px-4 py-3 border border-neutral-300 rounded-xl text-neutral-900 placeholder-neutral-500 bg-white focus:border-primary-500 focus:ring-2 focus:ring-primary-200 transition-all duration-200 resize-none;
+  @apply w-full px-4 py-3 border border-neutral-300 rounded-xl text-neutral-900 placeholder-neutral-400 bg-white focus:border-primary-500 focus:ring-2 focus:ring-primary-200 transition-all duration-200 resize-none;
 }
 
 /* Accessibility improvements */

@@ -18,6 +18,12 @@ const sidebarItems = [
     ]
   },
   {
+    title: 'Content',
+    items: [
+      { title: 'Blog Posts', href: '/admin/blog', icon: '📝' }
+    ]
+  },
+  {
     title: 'Sales',
     items: [
       { title: 'Orders', href: '/admin/orders', icon: '🛒' },
@@ -65,6 +71,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
         <div 
           className="fixed inset-0 bg-black/50 z-40 lg:hidden"
           onClick={() => setSidebarOpen(false)}
+          onTouchEnd={() => setSidebarOpen(false)}
         />
       )}
       
@@ -72,8 +79,8 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
       <aside className={`
         fixed lg:static inset-y-0 left-0 z-50 bg-primary-600 text-white transition-all duration-300 flex flex-col
         ${sidebarOpen ? 'w-64' : 'w-0 lg:w-64'}
-        ${sidebarCollapsed ? 'lg:w-16' : 'lg:w-64'}
-        overflow-y-auto
+        ${sidebarCollapsed ? 'lg:!w-16' : ''}
+        overflow-y-auto overflow-x-hidden
       `}>
         {/* Header */}
         <div className="flex items-center justify-between p-4 border-b border-white/10 h-16 flex-shrink-0">

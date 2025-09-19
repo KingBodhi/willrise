@@ -2,6 +2,7 @@
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
+import ImageUpload from '@/components/ImageUpload';
 
 export default function NewProductPage() {
   const router = useRouter();
@@ -12,6 +13,7 @@ export default function NewProductPage() {
     description: '',
     status: 'DRAFT'
   });
+  const [images, setImages] = useState<string[]>([]);
 
   async function createProduct() {
     if (!product.title || !product.handle) {
@@ -24,7 +26,14 @@ export default function NewProductPage() {
       const res = await fetch('/api/admin/products', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(product)
+        body: JSON.stringify({
+          ...product,
+          images: images.map((url, index) => ({
+            url,
+            alt: `${product.title} - Image ${index + 1}`,
+            position: index
+          }))
+        })
       });
       
       if (res.ok) {
@@ -117,6 +126,20 @@ export default function NewProductPage() {
               <option value="DRAFT">Draft</option>
               <option value="ACTIVE">Active</option>
             </select>
+          </div>
+
+          <div>
+            <label className="block text-sm font-semibold text-primary-600 mb-2">
+              Product Images
+            </label>
+            <ImageUpload
+              value={images}
+              onChange={setImages}
+              maxFiles={8}
+            />
+            <div className="text-sm text-neutral-500 mt-2">
+              Add product images to showcase your items. The first image will be used as the primary display image.
+            </div>
           </div>
         </div>
       </div>

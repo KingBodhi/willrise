@@ -3,7 +3,7 @@ import { getSession } from '@/lib/auth';
 
 export async function GET(req: Request, { params }: { params: { id: string } }) {
   const session = await getSession();
-  if (!session || session.role !== 'ADMIN') {
+  if (!session || (session.role !== 'ADMIN' && session.role !== 'EDITOR')) {
     return new Response('Unauthorized', { status: 401 });
   }
 
@@ -32,28 +32,59 @@ export async function GET(req: Request, { params }: { params: { id: string } }) 
 
 export async function PATCH(req: Request, { params }: { params: { id: string } }) {
   const session = await getSession();
-  if (!session || session.role !== 'ADMIN') {
+  if (!session || (session.role !== 'ADMIN' && session.role !== 'EDITOR')) {
     return new Response('Unauthorized', { status: 401 });
   }
 
   try {
     const updates = await req.json();
+    const { images, ...productUpdates } = updates;
     
-    const product = await prisma.product.update({
-      where: { id: params.id },
-      data: updates,
-      include: {
-        images: true,
-        variants: {
-          include: {
-            inventory: true
-          }
+    // Start a transaction to handle images
+    const product = await prisma.$transaction(async (tx) => {
+      // Update product basic info
+      const updatedProduct = await tx.product.update({
+        where: { id: params.id },
+        data: productUpdates
+      });
+
+      // Handle image updates if provided
+      if (images !== undefined) {
+        // Delete existing images
+        await tx.productImage.deleteMany({
+          where: { productId: params.id }
+        });
+
+        // Create new images
+        if (images.length > 0) {
+          await tx.productImage.createMany({
+            data: images.map((img: any, index: number) => ({
+              productId: params.id,
+              url: img.url,
+              alt: img.alt || `${updatedProduct.title} - Image ${index + 1}`,
+              position: index
+            }))
+          });
         }
       }
+
+      // Return updated product with images
+      return await tx.product.findUnique({
+        where: { id: params.id },
+        include: {
+          images: true,
+          variants: {
+            include: {
+              inventory: true
+            }
+          }
+        }
+      });
     });
 
     return Response.json(product);
   } catch (error) {
+    console.error('PATCH error:', error);
     return new Response('Internal Server Error', { status: 500 });
   }
 }
