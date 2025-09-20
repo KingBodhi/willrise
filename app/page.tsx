@@ -2,7 +2,7 @@ import Section from "../components/Section";
 import Link from "next/link";
 
 const TRUST_INDICATORS = [
-  { icon: "🏗️", text: "5,000+ Job Sites Protected" },
+  { icon: "🏗️", text: "Protecting Job Sites Worldwide" },
   { icon: "⚡", text: "Ships Within 24 Hours" },
   { icon: "🛡️", text: "ANSI/OSHA Certified" },
   { icon: "📞", text: "Expert Safety Consultation" }
@@ -53,12 +53,21 @@ function HeroSection() {
             
             <div className="flex items-center gap-4">
               <div className="flex -space-x-2">
-                {[1,2,3,4].map(i => (
-                  <div key={i} className="w-10 h-10 rounded-full bg-gradient-to-r from-primary-400 to-primary-600 border-2 border-white" />
-                ))}
+                <div className="w-12 h-12 rounded-full border-2 border-white overflow-hidden bg-white shadow-soft">
+                  <div className="w-full h-full flex items-center justify-center text-2xl">🇺🇸</div>
+                </div>
+                <div className="w-12 h-12 rounded-full border-2 border-white overflow-hidden bg-white shadow-soft">
+                  <div className="w-full h-full flex items-center justify-center text-2xl">🇨🇦</div>
+                </div>
+                <div className="w-12 h-12 rounded-full border-2 border-white overflow-hidden bg-white shadow-soft">
+                  <div className="w-full h-full flex items-center justify-center text-2xl">🇲🇽</div>
+                </div>
+                <div className="w-12 h-12 rounded-full border-2 border-white overflow-hidden bg-white shadow-soft">
+                  <div className="w-full h-full flex items-center justify-center text-2xl">🇪🇺</div>
+                </div>
               </div>
               <div className="text-sm">
-                <div className="font-bold text-neutral-900">2,500+ Safety Managers</div>
+                <div className="font-bold text-neutral-900">Worldwide Safety Managers</div>
                 <div className="text-neutral-700">trust Willrise harnesses</div>
               </div>
             </div>
@@ -124,29 +133,37 @@ function HeroSection() {
           <p className="text-sm font-semibold text-neutral-600 uppercase tracking-wide">Trusted by Industry Leaders</p>
         </div>
         <div className="relative overflow-hidden py-6">
-          <div className="flex w-[200%] animate-marquee">
-            <div className="flex w-1/2 whitespace-nowrap">
-              {CERT_LOGOS.map((src, i) => (
-                <div key={`a-${i}`} className="flex min-w-[20%] items-center justify-center px-4 sm:px-8">
-                  <img 
-                    src={src} 
-                    alt="Certification logo" 
-                    className="h-16 md:h-20 w-auto opacity-50 hover:opacity-100 transition-opacity" 
-                  />
-                </div>
-              ))}
-            </div>
-            <div className="flex w-1/2 whitespace-nowrap">
-              {CERT_LOGOS.map((src, i) => (
-                <div key={`b-${i}`} className="flex min-w-[20%] items-center justify-center px-4 sm:px-8">
-                  <img 
-                    src={src} 
-                    alt="Certification logo" 
-                    className="h-16 md:h-20 w-auto opacity-50 hover:opacity-100 transition-opacity" 
-                  />
-                </div>
-              ))}
-            </div>
+          <div className="flex animate-marquee">
+            {/* First set */}
+            {CERT_LOGOS.map((src, i) => (
+              <div key={`set1-${i}`} className="flex-shrink-0 w-40 flex items-center justify-center">
+                <img 
+                  src={src} 
+                  alt="Certification logo" 
+                  className="h-16 md:h-20 w-auto" 
+                />
+              </div>
+            ))}
+            {/* Second set for seamless loop */}
+            {CERT_LOGOS.map((src, i) => (
+              <div key={`set2-${i}`} className="flex-shrink-0 w-40 flex items-center justify-center">
+                <img 
+                  src={src} 
+                  alt="Certification logo" 
+                  className="h-16 md:h-20 w-auto" 
+                />
+              </div>
+            ))}
+            {/* Third set for extra smoothness */}
+            {CERT_LOGOS.map((src, i) => (
+              <div key={`set3-${i}`} className="flex-shrink-0 w-40 flex items-center justify-center">
+                <img 
+                  src={src} 
+                  alt="Certification logo" 
+                  className="h-16 md:h-20 w-auto" 
+                />
+              </div>
+            ))}
           </div>
         </div>
       </div>

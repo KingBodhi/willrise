@@ -1,16 +1,45 @@
 "use client";
 import useSWR from "swr";
 import { useState } from "react";
+import Link from "next/link";
 import TrustBadges from "@/components/TrustBadges";
 
-const fetcher = (u: string) => fetch(u).then(r => r.json());
+const fetcher = async (u: string) => {
+  const response = await fetch(u);
+  if (!response.ok) {
+    throw new Error(`Failed to fetch product: ${response.status} ${response.statusText}`);
+  }
+  return response.json();
+};
 const money = (c: number) => Intl.NumberFormat(undefined, { style: "currency", currency: "USD" }).format(c / 100);
 
 export default function Page({ params }: { params: { handle: string } }) {
-  const { data } = useSWR(`/api/products/${params.handle}`, fetcher);
+  const { data, error, isLoading } = useSWR(`/api/products/${params.handle}`, fetcher);
   const [variantId, setVariantId] = useState<string | null>(null);
   const [qty, setQty] = useState(1);
   const [ack, setAck] = useState(false);
+
+  if (error) {
+    return (
+      <div className="bg-gradient-to-br from-neutral-50 to-white min-h-screen">
+        <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 py-16">
+          <div className="text-center">
+            <div className="text-6xl mb-6">❌</div>
+            <h1 className="font-display text-3xl font-bold text-primary-600 mb-4">Product Not Found</h1>
+            <p className="text-neutral-600 mb-8">
+              The product you're looking for doesn't exist or has been removed.
+            </p>
+            <Link 
+              href="/shop"
+              className="bg-accent-500 hover:bg-accent-600 text-white px-8 py-4 rounded-xl font-bold transition-colors"
+            >
+              Browse All Products
+            </Link>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   if (!data) {
     return (
@@ -68,7 +97,7 @@ export default function Page({ params }: { params: { handle: string } }) {
       <div className="grid gap-8 lg:gap-12 lg:grid-cols-2">
         {/* Product Images */}
         <div className="space-y-4">
-          <div className="aspect-square overflow-hidden rounded-2xl border border-neutral-200 bg-neutral-100">
+          <div className="aspect-[4/3] lg:aspect-[3/4] overflow-hidden rounded-2xl border border-neutral-200 bg-neutral-100">
             {data.images?.[0] && (
               <img 
                 src={data.images[0].url} 
@@ -77,8 +106,8 @@ export default function Page({ params }: { params: { handle: string } }) {
               />
             )}
           </div>
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-            {(data.images || []).slice(0, 4).map((img: any) => (
+          <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-2 gap-3">
+            {(data.images || []).slice(1, 5).map((img: any) => (
               <div key={img.id} className="aspect-square overflow-hidden rounded-lg border border-neutral-200 bg-neutral-100">
                 <img 
                   src={img.url} 

@@ -1,10 +1,36 @@
 import { prisma } from "@/lib/prisma";
 import { getSession } from "@/lib/auth";
 export async function GET(){
-  const sess = await getSession();
-  if(!sess) return new Response("Unauthorized",{status:401});
-  const products = await prisma.product.findMany({ include:{ variants:true, images:true, collections:{ include:{ collection:true } } } });
-  return Response.json(products);
+  try {
+    const sess = await getSession();
+    if(!sess) {
+      console.log('No session found for admin products request');
+      return new Response("Unauthorized",{status:401});
+    }
+    console.log('Session found:', sess.email, sess.role);
+    
+    const products = await prisma.product.findMany({ 
+      include:{ 
+        variants: {
+          include: {
+            inventory: true
+          }
+        }, 
+        images: true, 
+        collections: { 
+          include: { 
+            collection: true 
+          } 
+        } 
+      } 
+    });
+    
+    console.log(`Found ${products.length} products`);
+    return Response.json(products);
+  } catch (error) {
+    console.error('Admin products API error:', error);
+    return new Response("Internal Server Error", {status: 500});
+  }
 }
 export async function POST(req:Request){
   const sess = await getSession();
@@ -25,7 +51,7 @@ export async function POST(req:Request){
       create: images.map((img: any, index: number) => ({
         url: img.url,
         alt: img.alt || `${title} - Image ${index + 1}`,
-        position: index
+        sort: index
       }))
     };
   }

@@ -50,7 +50,7 @@ input:focus, textarea:focus, select:focus {
 /* Enhanced marquee animation */
 @keyframes marquee {
   0% { transform: translateX(0); }
-  100% { transform: translateX(-100%); }
+  100% { transform: translateX(-200px); }
 }
 
 .animate-marquee {

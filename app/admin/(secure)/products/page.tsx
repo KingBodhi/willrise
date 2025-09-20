@@ -3,7 +3,13 @@ import { useState } from 'react';
 import useSWR from 'swr';
 import Link from 'next/link';
 
-const fetcher = (url: string) => fetch(url).then(r => r.json());
+const fetcher = async (url: string) => {
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error(`Failed to load data: ${response.status} ${response.statusText}`);
+  }
+  return response.json();
+};
 
 interface Product {
   id: string;
@@ -21,9 +27,28 @@ interface Product {
 }
 
 export default function ProductsPage() {
-  const { data: products, mutate } = useSWR<Product[]>('/api/admin/products', fetcher);
+  const { data: products, error, mutate } = useSWR<Product[]>('/api/admin/products', fetcher);
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('ALL');
+
+  if (error) {
+    return (
+      <div className="space-y-4">
+        <div className="bg-danger-50 border border-danger-200 rounded-xl p-6">
+          <h2 className="font-display text-xl font-bold text-danger-800 mb-2">Error Loading Products</h2>
+          <p className="text-danger-700 mb-4">
+            {error.message || 'Failed to load products. Please check your connection and try again.'}
+          </p>
+          <button
+            onClick={() => mutate()}
+            className="bg-danger-600 hover:bg-danger-700 text-white px-4 py-2 rounded-lg font-semibold transition-colors"
+          >
+            Retry
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   const filteredProducts = products?.filter(product => {
     const matchesSearch = product.title.toLowerCase().includes(searchTerm.toLowerCase()) ||

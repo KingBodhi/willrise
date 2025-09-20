@@ -1,68 +1,205 @@
 "use client";
 import { useState } from 'react';
+import useSWR from 'swr';
+
+const fetcher = async (url: string) => {
+  const response = await fetch(url);
+  if (!response.ok) {
+    throw new Error(`Failed to load team data: ${response.status} ${response.statusText}`);
+  }
+  return response.json();
+};
 
 export default function TeamSettingsPage() {
-  const [teamMembers] = useState([
-    {
-      id: '1',
-      name: 'Admin User',
-      email: 'admin@willrise.com',
-      role: 'ADMIN',
-      status: 'Active',
-      lastLogin: '2024-01-15T10:30:00Z',
-      avatar: null
-    }
-  ]);
+  const { data: teamMembers, error, mutate } = useSWR('/api/admin/team', fetcher);
+  const [showCreateUser, setShowCreateUser] = useState(false);
 
-  const [invitations] = useState([
-    {
-      id: '1',
-      email: 'manager@willrise.com',
-      role: 'EDITOR',
-      status: 'Pending',
-      invitedAt: '2024-01-14T15:20:00Z'
+  // Fallback data while API loads or if there's an error
+  const members = teamMembers || [];
+  const [newUser, setNewUser] = useState({
+    name: '',
+    email: '',
+    password: '',
+    role: 'EDITOR'
+  });
+
+  async function createUser() {
+    if (!newUser.name || !newUser.email || !newUser.password) {
+      alert('Please fill in all fields');
+      return;
     }
-  ]);
+
+    try {
+      const res = await fetch('/api/admin/team', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(newUser)
+      });
+
+      if (res.ok) {
+        setNewUser({ name: '', email: '', password: '', role: 'EDITOR' });
+        setShowCreateUser(false);
+        mutate();
+        alert('User created successfully!');
+      } else {
+        const error = await res.text();
+        alert('Failed to create user: ' + error);
+      }
+    } catch (error) {
+      alert('Network error creating user');
+    }
+  }
+
+  async function deleteUser(id: string, name: string) {
+    if (!confirm(`Remove ${name} from the team? This action cannot be undone.`)) return;
+
+    try {
+      const res = await fetch(`/api/admin/team/${id}`, { method: 'DELETE' });
+      if (res.ok) {
+        mutate();
+        alert('User removed successfully');
+      } else {
+        alert('Failed to remove user');
+      }
+    } catch (error) {
+      alert('Network error');
+    }
+  }
+
+  if (error) {
+    return (
+      <div className="space-y-4">
+        <div className="bg-danger-50 border border-danger-200 rounded-xl p-6">
+          <h2 className="font-display text-xl font-bold text-danger-800 mb-2">Error Loading Team</h2>
+          <p className="text-danger-700 mb-4">
+            {error.message || 'Failed to load team members. Please check authentication and try again.'}
+          </p>
+          <button
+            onClick={() => mutate()}
+            className="bg-danger-600 hover:bg-danger-700 text-white px-4 py-2 rounded-lg font-semibold transition-colors"
+          >
+            Retry
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-8">
       {/* Header */}
       <div>
         <h1 className="font-display text-3xl font-bold text-primary-600 mb-2">Team & Permissions</h1>
-        <p className="text-neutral-600">Manage admin users, roles, and access permissions</p>
+        <p className="text-neutral-600">Manage admin users and access permissions</p>
       </div>
 
       {/* Team Stats */}
       <div className="grid md:grid-cols-4 gap-6">
         <div className="bg-white rounded-2xl shadow-lg p-6 border border-neutral-200">
-          <div className="text-3xl font-bold text-primary-600 mb-2">{teamMembers.length}</div>
+          <div className="text-3xl font-bold text-primary-600 mb-2">{members.length}</div>
           <div className="text-neutral-600">Team Members</div>
         </div>
         <div className="bg-white rounded-2xl shadow-lg p-6 border border-neutral-200">
           <div className="text-3xl font-bold text-success-600 mb-2">
-            {teamMembers.filter(m => m.role === 'ADMIN').length}
+            {members.filter((m: any) => m.role === 'ADMIN').length}
           </div>
           <div className="text-neutral-600">Administrators</div>
         </div>
         <div className="bg-white rounded-2xl shadow-lg p-6 border border-neutral-200">
           <div className="text-3xl font-bold text-accent-600 mb-2">
-            {teamMembers.filter(m => m.role === 'EDITOR').length}
+            {members.filter((m: any) => m.role === 'EDITOR').length}
           </div>
           <div className="text-neutral-600">Editors</div>
         </div>
         <div className="bg-white rounded-2xl shadow-lg p-6 border border-neutral-200">
-          <div className="text-3xl font-bold text-warning-600 mb-2">{invitations.length}</div>
-          <div className="text-neutral-600">Pending Invites</div>
+          <div className="text-3xl font-bold text-primary-600 mb-2">
+            {members.filter((m: any) => m.role === 'ADMIN' || m.role === 'EDITOR').length}
+          </div>
+          <div className="text-neutral-600">Active Users</div>
         </div>
       </div>
+
+      {/* Create User Modal */}
+      {showCreateUser && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
+          <div className="bg-white rounded-2xl p-8 max-w-md w-full mx-4">
+            <h2 className="font-display text-xl font-bold text-primary-600 mb-6">Create New User</h2>
+            
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-semibold text-primary-600 mb-2">Full Name</label>
+                <input
+                  type="text"
+                  value={newUser.name}
+                  onChange={(e) => setNewUser({...newUser, name: e.target.value})}
+                  className="admin-input"
+                  placeholder="Enter full name"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-semibold text-primary-600 mb-2">Email Address</label>
+                <input
+                  type="email"
+                  value={newUser.email}
+                  onChange={(e) => setNewUser({...newUser, email: e.target.value})}
+                  className="admin-input"
+                  placeholder="user@willrise.com"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-semibold text-primary-600 mb-2">Password</label>
+                <input
+                  type="password"
+                  value={newUser.password}
+                  onChange={(e) => setNewUser({...newUser, password: e.target.value})}
+                  className="admin-input"
+                  placeholder="Secure password"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-semibold text-primary-600 mb-2">Role</label>
+                <select
+                  value={newUser.role}
+                  onChange={(e) => setNewUser({...newUser, role: e.target.value})}
+                  className="admin-select"
+                >
+                  <option value="EDITOR">Editor</option>
+                  <option value="ADMIN">Administrator</option>
+                </select>
+              </div>
+            </div>
+            
+            <div className="flex justify-end gap-4 mt-6">
+              <button
+                onClick={() => setShowCreateUser(false)}
+                className="border border-neutral-300 px-6 py-3 rounded-xl hover:bg-neutral-50 transition-colors"
+              >
+                Close
+              </button>
+              <button
+                onClick={createUser}
+                className="bg-accent-500 hover:bg-accent-600 text-white px-6 py-3 rounded-xl font-semibold transition-colors"
+              >
+                Add Team Member
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Team Members */}
       <div className="bg-white rounded-2xl shadow-lg border border-neutral-200 overflow-hidden">
         <div className="p-6 border-b border-neutral-200">
           <div className="flex items-center justify-between">
             <h2 className="font-display text-xl font-bold text-primary-600">Team Members</h2>
-            <button className="bg-accent-500 hover:bg-accent-600 text-white px-4 py-2 rounded-lg font-semibold transition-colors">
-              Invite Member
+            <button
+              onClick={() => setShowCreateUser(true)}
+              className="bg-accent-500 hover:bg-accent-600 text-white px-4 py-2 rounded-lg font-semibold transition-colors"
+            >
+              Add User
             </button>
           </div>
         </div>
@@ -74,12 +211,12 @@ export default function TeamSettingsPage() {
                 <th className="px-6 py-4 text-left font-semibold text-neutral-900">User</th>
                 <th className="px-6 py-4 text-left font-semibold text-neutral-900">Role</th>
                 <th className="px-6 py-4 text-left font-semibold text-neutral-900">Status</th>
-                <th className="px-6 py-4 text-left font-semibold text-neutral-900">Last Login</th>
+                <th className="px-6 py-4 text-left font-semibold text-neutral-900">Created</th>
                 <th className="px-6 py-4 text-right font-semibold text-neutral-900">Actions</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-neutral-200">
-              {teamMembers.map((member) => (
+              {members.map((member: any) => (
                 <tr key={member.id} className="hover:bg-neutral-50 transition-colors">
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
@@ -105,20 +242,24 @@ export default function TeamSettingsPage() {
                   </td>
                   <td className="px-6 py-4">
                     <span className="px-3 py-1 bg-success-100 text-success-700 rounded-full text-sm font-semibold">
-                      {member.status}
+                      Active
                     </span>
                   </td>
                   <td className="px-6 py-4">
                     <div className="text-sm text-neutral-600">
-                      {new Date(member.lastLogin).toLocaleDateString()}
+                      {new Date(member.createdAt).toLocaleDateString()}
                     </div>
                   </td>
                   <td className="px-6 py-4 text-right">
-                    <button className="text-primary-600 hover:text-primary-700 font-medium mr-3">
-                      Edit
-                    </button>
-                    <button className="text-danger-600 hover:text-danger-700 font-medium">
-                      Remove
+                    <button
+                      onClick={() => deleteUser(member.id, member.name)}
+                      className="text-danger-600 hover:text-danger-700 font-medium"
+                      disabled={member.role === 'ADMIN' && members.filter((m: any) => m.role === 'ADMIN').length === 1}
+                    >
+                      {member.role === 'ADMIN' && members.filter((m: any) => m.role === 'ADMIN').length === 1 
+                        ? 'Last Admin' 
+                        : 'Remove'
+                      }
                     </button>
                   </td>
                 </tr>
@@ -126,59 +267,20 @@ export default function TeamSettingsPage() {
             </tbody>
           </table>
         </div>
-      </div>
 
-      {/* Pending Invitations */}
-      <div className="bg-white rounded-2xl shadow-lg border border-neutral-200 overflow-hidden">
-        <div className="p-6 border-b border-neutral-200">
-          <h2 className="font-display text-xl font-bold text-primary-600">Pending Invitations</h2>
-        </div>
-        
-        <div className="overflow-x-auto">
-          <table className="w-full">
-            <thead className="bg-neutral-50">
-              <tr>
-                <th className="px-6 py-4 text-left font-semibold text-neutral-900">Email</th>
-                <th className="px-6 py-4 text-left font-semibold text-neutral-900">Role</th>
-                <th className="px-6 py-4 text-left font-semibold text-neutral-900">Status</th>
-                <th className="px-6 py-4 text-left font-semibold text-neutral-900">Invited</th>
-                <th className="px-6 py-4 text-right font-semibold text-neutral-900">Actions</th>
-              </tr>
-            </thead>
-            <tbody className="divide-y divide-neutral-200">
-              {invitations.map((invitation) => (
-                <tr key={invitation.id} className="hover:bg-neutral-50 transition-colors">
-                  <td className="px-6 py-4">
-                    <div className="font-medium text-neutral-900">{invitation.email}</div>
-                  </td>
-                  <td className="px-6 py-4">
-                    <span className="px-3 py-1 bg-success-100 text-success-700 rounded-full text-sm font-semibold">
-                      {invitation.role}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4">
-                    <span className="px-3 py-1 bg-warning-100 text-warning-700 rounded-full text-sm font-semibold">
-                      {invitation.status}
-                    </span>
-                  </td>
-                  <td className="px-6 py-4">
-                    <div className="text-sm text-neutral-600">
-                      {new Date(invitation.invitedAt).toLocaleDateString()}
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 text-right">
-                    <button className="text-accent-600 hover:text-accent-700 font-medium mr-3">
-                      Resend
-                    </button>
-                    <button className="text-danger-600 hover:text-danger-700 font-medium">
-                      Cancel
-                    </button>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+        {members.length === 0 && (
+          <div className="text-center py-12">
+            <div className="text-4xl mb-4">👥</div>
+            <div className="font-semibold text-primary-600 mb-2">No team members found</div>
+            <div className="text-neutral-600 mb-4">Add your first team member to get started</div>
+            <button
+              onClick={() => setShowCreateUser(true)}
+              className="bg-accent-500 hover:bg-accent-600 text-white px-6 py-3 rounded-xl font-semibold transition-colors"
+            >
+              Add First User
+            </button>
+          </div>
+        )}
       </div>
 
       {/* Role Permissions */}
@@ -214,7 +316,8 @@ export default function TeamSettingsPage() {
                 'Manage products & inventory',
                 'Process orders',
                 'View sales reports',
-                'Manage collections'
+                'Manage collections',
+                'Create blog posts'
               ].map((permission, index) => (
                 <div key={index} className="flex items-center gap-2">
                   <svg className="w-4 h-4 text-success-500" fill="currentColor" viewBox="0 0 20 20">

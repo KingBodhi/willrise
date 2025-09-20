@@ -1,7 +1,10 @@
 "use client";
 import { ReactNode, useState, useEffect } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
+import useSWR from 'swr';
+
+const fetcher = (url: string) => fetch(url).then(r => r.json());
 
 const sidebarItems = [
   {
@@ -46,6 +49,10 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
   const pathname = usePathname();
+  const router = useRouter();
+  
+  // Check authentication status
+  const { data: session, error } = useSWR('/api/admin/session', fetcher);
 
   // Close mobile sidebar on route change
   useEffect(() => {
@@ -63,6 +70,30 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
       document.body.style.overflow = '';
     };
   }, [sidebarOpen]);
+
+  // Authentication redirect effect
+  useEffect(() => {
+    if (error || (session && !session.authenticated)) {
+      router.push('/admin/login');
+    }
+  }, [session, error, router]);
+
+  // Show loading while checking authentication
+  if (!session && !error) {
+    return (
+      <div className="min-h-screen bg-neutral-50 flex items-center justify-center">
+        <div className="text-center">
+          <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto mb-4"></div>
+          <div className="text-neutral-600">Checking authentication...</div>
+        </div>
+      </div>
+    );
+  }
+
+  // Don't render admin interface if not authenticated
+  if (!session?.authenticated) {
+    return null;
+  }
 
   return (
     <div className="min-h-screen bg-neutral-50 flex">

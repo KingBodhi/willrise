@@ -62,7 +62,7 @@ export async function PATCH(req: Request, { params }: { params: { id: string } }
               productId: params.id,
               url: img.url,
               alt: img.alt || `${updatedProduct.title} - Image ${index + 1}`,
-              position: index
+              sort: index
             }))
           });
         }
