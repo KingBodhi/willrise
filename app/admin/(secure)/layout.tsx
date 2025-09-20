@@ -23,7 +23,8 @@ const sidebarItems = [
   {
     title: 'Content',
     items: [
-      { title: 'Blog Posts', href: '/admin/blog', icon: '📝' }
+      { title: 'Blog Posts', href: '/admin/blog', icon: '📝' },
+      { title: 'Careers', href: '/admin/careers', icon: '💼' }
     ]
   },
   {

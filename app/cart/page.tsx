@@ -49,7 +49,8 @@ export default function Page() {
   }
 
   return (
-    <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-8 lg:py-16">
+    <div className="bg-gradient-to-br from-neutral-50 to-white min-h-screen">
+      <div className="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-8 lg:py-16">
       <div className="mb-8">
         <h1 className="font-display text-3xl font-bold text-primary-600">Shopping Cart</h1>
         <p className="mt-2 text-neutral-600">
@@ -159,6 +160,7 @@ export default function Page() {
           </Link>
         </div>
       )}
+      </div>
     </div>
   );
 }

@@ -15,7 +15,6 @@ const footerLinks = {
   ],
   support: [
     { name: "Contact Support", href: "/support" },
-    { name: "Installation Guides", href: "/support/installation" },
     { name: "Training Resources", href: "/support/training" },
     { name: "Warranty", href: "/support/warranty" }
   ],
