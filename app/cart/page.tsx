@@ -68,7 +68,7 @@ export default function Page() {
                   <div key={item.id} className="p-6">
                     <div className="flex flex-col sm:flex-row gap-4">
                       <div className="flex-1">
-                        <h3 className="font-semibold text-primary-600">{item.title}</h3>
+                        <h3 className="font-semibold text-primary-600">{item.variant?.product?.title || "Product"}</h3>
                         <p className="text-sm text-neutral-600 mt-1">
                           SKU: {item.variant?.sku || "N/A"}
                         </p>

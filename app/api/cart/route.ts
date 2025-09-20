@@ -1,1 +1,11 @@
-import { getOrCreateCart } from '@/lib/cart'; export async function GET(){ const cart=await getOrCreateCart(); return Response.json(cart); }
+import { getOrCreateCart } from '@/lib/cart';
+
+export async function GET() {
+  try {
+    const cart = await getOrCreateCart();
+    return Response.json(cart);
+  } catch (error) {
+    console.error('Cart API error:', error);
+    return new Response('Internal server error', { status: 500 });
+  }
+}
