@@ -10,14 +10,17 @@
     "db:push": "prisma db push",
     "db:studio": "prisma studio",
     "seed": "node prisma/seed.cjs",
-    "quick-wins": "node scripts/quick-wins.cjs"
+    "quick-wins": "node scripts/quick-wins.cjs",
+    "build:prod": "NODE_ENV=production npm run build",
+    "type-check": "tsc --noEmit",
+    "security-audit": "npm audit --audit-level moderate"
   },
   "dependencies": {
     "@prisma/client": "^5.22.0",
     "@types/react-dropzone": "^4.2.2",
     "bcryptjs": "^2.4.3",
     "jose": "^5.3.0",
-    "next": "14.2.5",
+    "next": "^14.2.32",
     "nodemailer": "^6.9.7",
     "react": "18.3.1",
     "react-dom": "18.3.1",
