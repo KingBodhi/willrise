@@ -4,3 +4,5 @@ node_modules
 /.next/server
 /.next/static
 /.next/types
+.env
+.env.production
