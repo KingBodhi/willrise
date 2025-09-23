@@ -16,7 +16,8 @@ type BlogPost = {
 
 async function getBlogPosts(): Promise<BlogPost[]> {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/blog`, {
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || (typeof window !== 'undefined' ? '' : 'http://localhost:3001');
+    const response = await fetch(`${baseUrl}/api/blog`, {
       cache: 'no-store'
     });
 
@@ -45,7 +46,7 @@ export default async function BlogPage() {
             <h1 className="font-display text-display-1 font-bold text-primary-600 mb-4">
               Safety Insights & Research
             </h1>
-            <p className="text-body-lg text-neutral-700 max-w-3xl mx-auto leading-relaxed">
+            <p className="text-body-lg text-neutral-800 max-w-3xl mx-auto leading-relaxed">
               Expert insights on fall protection technology, industry standards, and safety best practices
               to keep your team protected on the job.
             </p>

@@ -17,7 +17,8 @@ type BlogPost = {
 
 async function getPost(slug: string): Promise<BlogPost | null> {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/blog/${slug}`, {
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || (typeof window !== 'undefined' ? '' : 'http://localhost:3001');
+    const response = await fetch(`${baseUrl}/api/blog/${slug}`, {
       cache: 'no-store'
     });
 
@@ -32,7 +33,7 @@ async function getPost(slug: string): Promise<BlogPost | null> {
   }
 }
 
-export default async function Page({ params }:{ params:{ slug:string }}){
+export default async function Page({ params }:{ params:{ slug:string }}) {
   const post = await getPost(params.slug);
   if(!post) {
     return (
@@ -111,21 +112,22 @@ export default async function Page({ params }:{ params:{ slug:string }}){
                 </p>
               )}
 
-              {/* Article Body */}
-              <div className="prose prose-lg prose-neutral max-w-none
-                prose-headings:font-display prose-headings:text-primary-600
-                prose-p:text-neutral-800 prose-p:leading-relaxed
-                prose-a:text-accent-500 prose-a:font-semibold hover:prose-a:text-accent-600
-                prose-strong:text-primary-600 prose-strong:font-semibold
-                prose-ul:text-neutral-800 prose-ol:text-neutral-800
-                prose-li:text-neutral-800
-                prose-blockquote:border-accent-500 prose-blockquote:text-primary-600
-                prose-code:bg-neutral-100 prose-code:text-accent-600 prose-code:px-2 prose-code:py-1 prose-code:rounded
-                prose-td:text-neutral-800 prose-th:text-primary-600
-                [&_.callout]:bg-primary-50 [&_.callout]:border-primary-200 [&_.callout]:text-neutral-800
-                [&_.warning]:bg-warning-50 [&_.warning]:border-warning-200 [&_.warning]:text-neutral-800
-                [&_.info]:bg-blue-50 [&_.info]:border-blue-200 [&_.info]:text-neutral-800
-              "
+              {/* Article Body with forced dark text */}
+              <div className="prose prose-lg max-w-none
+                [&_p]:!text-gray-900 [&_p]:!leading-relaxed [&_p]:!mb-6
+                [&_h1]:!text-blue-800 [&_h1]:!font-bold [&_h1]:!text-4xl [&_h1]:!mt-8 [&_h1]:!mb-4
+                [&_h2]:!text-blue-800 [&_h2]:!font-bold [&_h2]:!text-3xl [&_h2]:!mt-8 [&_h2]:!mb-4
+                [&_h3]:!text-blue-800 [&_h3]:!font-bold [&_h3]:!text-2xl [&_h3]:!mt-6 [&_h3]:!mb-3
+                [&_h4]:!text-gray-900 [&_h4]:!font-bold [&_h4]:!text-xl [&_h4]:!mt-6 [&_h4]:!mb-3
+                [&_li]:!text-gray-900 [&_li]:!leading-relaxed [&_li]:!mb-2
+                [&_ul]:!text-gray-900 [&_ul]:!my-6 [&_ul]:!pl-8
+                [&_ol]:!text-gray-900 [&_ol]:!my-6 [&_ol]:!pl-8
+                [&_strong]:!text-blue-800 [&_strong]:!font-semibold
+                [&_b]:!text-blue-800 [&_b]:!font-semibold
+                [&_a]:!text-amber-600 [&_a]:!underline [&_a]:hover:!text-amber-700
+                [&_blockquote]:!border-l-amber-500 [&_blockquote]:!border-l-4 [&_blockquote]:!pl-6 [&_blockquote]:!my-6 [&_blockquote]:!italic [&_blockquote]:!text-blue-800 [&_blockquote]:!bg-slate-50 [&_blockquote]:!p-6 [&_blockquote]:!rounded-lg
+                [&_blockquote_p]:!text-blue-800 [&_blockquote_p]:!mb-0
+                [&_code]:!bg-slate-100 [&_code]:!text-amber-600 [&_code]:!px-2 [&_code]:!py-1 [&_code]:!rounded [&_code]:!text-sm"
                 dangerouslySetInnerHTML={{ __html: post.content }}
               />
             </div>
