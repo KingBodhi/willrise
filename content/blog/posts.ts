@@ -267,61 +267,104 @@ export const posts: Post[] = [
     `
   },
   {
-    slug: "bench-protocol-overview",
-    title: "Bench Test Protocol Overview",
+    slug: "pre-use-inspection-checklist",
+    title: "Job Site Safety: Pre-Use Inspection Checklist",
     date: "2024-09-10",
-    excerpt: "A detailed look at our testing methodology and quality assurance processes.",
-    image: "/images/blog/bench.svg", 
+    excerpt: "Essential daily inspection procedures for fall protection equipment. Ensure your gear is ready when you need it most.",
+    image: "/images/blog/inspection.svg",
     body: `
-      <h2>Engineering Excellence Through Testing</h2>
-      <p>Behind every Willrise harness lies thousands of hours of rigorous testing. Our bench test protocols ensure that theoretical improvements translate into real-world safety benefits.</p>
-      
-      <h2>Test Facility Overview</h2>
-      <p>Our dedicated testing laboratory features state-of-the-art equipment designed specifically for fall protection research and verification.</p>
-      
-      <h3>Primary Test Apparatus</h3>
+      <h2>The Critical First Line of Defense</h2>
+      <p>Pre-use inspection is the most important safety practice that costs nothing but can save lives. A systematic daily check ensures your fall protection equipment is ready when you need it most.</p>
+
+      <h2>Legal Requirements</h2>
+      <p>OSHA 1926.95(a) requires that "Personal protective equipment shall be inspected before each use and during use to ensure it is in safe working condition." This isn't just good practice—it's mandatory.</p>
+
+      <h2>Full Body Harness Inspection</h2>
+
+      <h3>Webbing and Straps</h3>
+      <div class="bg-neutral-100 border border-neutral-200 rounded-xl p-6 my-6">
+        <h4 class="font-bold text-neutral-800 mb-3">Visual Inspection Checklist:</h4>
+        <ul class="text-neutral-700 space-y-2">
+          <li>✓ Check for cuts, tears, or fraying</li>
+          <li>✓ Look for chemical damage or discoloration</li>
+          <li>✓ Examine stitching for broken or loose threads</li>
+          <li>✓ Feel for unusual stiffness or brittleness</li>
+          <li>✓ Verify all labels are present and readable</li>
+        </ul>
+      </div>
+
+      <h3>Metal Hardware</h3>
       <ul>
-        <li><strong>Dynamic Drop Tower:</strong> 30-foot adjustable height with precise weight control</li>
-        <li><strong>Static Load Frame:</strong> Capable of 15,000+ lb loading capacity</li>
-        <li><strong>Pressure Mapping System:</strong> 2,048 sensor matrix for strap pressure analysis</li>
-        <li><strong>Anthropomorphic Test Device:</strong> Human-accurate mass distribution</li>
+        <li><strong>D-Rings:</strong> Check for cracks, sharp edges, or excessive wear</li>
+        <li><strong>Buckles:</strong> Ensure smooth operation and proper engagement</li>
+        <li><strong>Grommets:</strong> Look for cracking or deformation</li>
+        <li><strong>Snaps/Hooks:</strong> Test spring action and gate closure</li>
       </ul>
-      
-      <h2>Core Testing Protocols</h2>
-      
-      <h3>1. Certification Compliance Testing</h3>
-      <p>Every product must pass ANSI Z359.1 requirements including:</p>
+
+      <h3>Adjustment Mechanisms</h3>
       <ul>
-        <li>5,000 lb static strength test</li>
-        <li>2,500 lb dynamic strength test</li>
-        <li>Buckle and hardware verification</li>
-        <li>Stitching and webbing integrity</li>
+        <li>Test all buckle adjustments for smooth operation</li>
+        <li>Verify friction buckles hold securely</li>
+        <li>Check quick-connect buckles engage properly</li>
+        <li>Ensure adjustment range is appropriate for user</li>
       </ul>
-      
-      <h3>2. Kinetic Performance Analysis</h3>
-      <p>Our proprietary tests measure the unique benefits of kinetic geometry:</p>
+
+      <h2>Lanyard and Connector Inspection</h2>
+
+      <h3>Lanyard Components</h3>
       <ul>
-        <li><strong>Force Distribution Mapping:</strong> Pressure across body contact points</li>
-        <li><strong>Circulation Simulation:</strong> Blood flow restriction analysis</li>
-        <li><strong>Posture Maintenance:</strong> Body position during suspension</li>
-        <li><strong>Comfort Duration:</strong> Time to discomfort onset</li>
+        <li><strong>Webbing/Rope:</strong> Same checks as harness webbing</li>
+        <li><strong>Energy Absorber:</strong> Check for activation, damage, or wear</li>
+        <li><strong>Protective Sleeves:</strong> Ensure covers are intact and positioned correctly</li>
       </ul>
-      
-      <h3>3. Environmental Durability</h3>
-      <p>Real-world conditions testing includes:</p>
+
+      <h3>Snap Hooks and Carabiners</h3>
+      <div class="bg-warning-50 border border-warning-200 rounded-xl p-6 my-6">
+        <h4 class="font-bold text-warning-800 mb-3">Critical Points:</h4>
+        <ul class="text-warning-700 space-y-2">
+          <li>⚠️ Gate must close and lock automatically</li>
+          <li>⚠️ Spring mechanism must function smoothly</li>
+          <li>⚠️ No visible cracks or deformation</li>
+          <li>⚠️ Keeper/locking mechanism must engage properly</li>
+        </ul>
+      </div>
+
+      <h2>Immediate Removal Criteria</h2>
+      <p>Remove equipment from service immediately if you find:</p>
       <ul>
-        <li>UV exposure equivalent to 10 years outdoor use</li>
-        <li>Temperature cycling from -40°F to +140°F</li>
-        <li>Salt spray corrosion testing</li>
-        <li>Abrasion and wear simulation</li>
+        <li>Any cut, tear, or fray in load-bearing webbing</li>
+        <li>Damaged or non-functioning hardware</li>
+        <li>Evidence of chemical or heat damage</li>
+        <li>Missing or illegible identification tags</li>
+        <li>Equipment beyond manufacturer's recommended service life</li>
+        <li>Equipment that has arrested a fall (must be retired)</li>
       </ul>
-      
-      <h2>Data-Driven Design</h2>
-      <p>Our testing generates over 50 data points per harness evaluation, creating a comprehensive performance profile that guides continuous improvement efforts.</p>
-      
-      <blockquote>
-        <p>"Testing isn't just about meeting standards—it's about understanding how to exceed them in ways that matter for worker safety." - Dr. Sarah Mitchell, CTO</p>
-      </blockquote>
+
+      <h2>Documentation and Records</h2>
+      <p>Maintain inspection records including:</p>
+      <ul>
+        <li>Date and time of inspection</li>
+        <li>Inspector name and signature</li>
+        <li>Equipment identification numbers</li>
+        <li>Condition notes or defects found</li>
+        <li>Disposition (continued use, repair, retirement)</li>
+      </ul>
+
+      <h2>Best Practices for Inspection</h2>
+
+      <h3>Systematic Approach</h3>
+      <p>Develop a consistent inspection routine. Start at the same point each time and work systematically through all components. This reduces the chance of missing critical issues.</p>
+
+      <h3>Adequate Lighting</h3>
+      <p>Perform inspections in good lighting conditions. Use a flashlight if necessary to examine all areas thoroughly.</p>
+
+      <h3>Clean Equipment First</h3>
+      <p>Clean equipment makes inspection easier and more thorough. Dirt and grime can hide critical defects.</p>
+
+      <div class="bg-success-50 border border-success-200 rounded-xl p-6 mt-8">
+        <h3 class="font-bold text-success-800 mb-2">Remember</h3>
+        <p class="text-success-700">If you have any doubt about equipment condition, remove it from service. Your life isn't worth the risk of using questionable equipment.</p>
+      </div>
     `
   }
 ];

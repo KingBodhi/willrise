@@ -36,14 +36,15 @@ export default function Page() {
   async function checkout() {
     try {
       const res = await fetch("/api/checkout/session", { method: "POST" });
+      const json = await res.json();
+
       if (!res.ok) {
-        const msg = await res.text();
-        alert("Checkout error: " + msg + "\nMake sure STRIPE_SECRET_KEY is set in .env");
+        alert(json.error || "Checkout error occurred");
         return;
       }
-      const json = await res.json();
+
       if (json.url) location.href = json.url;
-    } catch {
+    } catch (error) {
       alert("Network error creating checkout session.");
     }
   }
