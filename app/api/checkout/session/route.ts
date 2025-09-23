@@ -11,9 +11,7 @@ export async function POST() {
     // Check for Stripe configuration
     const STRIPE_KEY = process.env.STRIPE_SECRET_KEY;
     if (!STRIPE_KEY) {
-      logger.error('Stripe configuration missing', {
-        error: 'STRIPE_SECRET_KEY not found in environment variables'
-      });
+      logger.error('STRIPE_SECRET_KEY not found in environment variables');
       return Response.json({
         error: 'Checkout error: Make sure STRIPE_SECRET_KEY is set in .env'
       }, { status: 500 });
@@ -52,7 +50,8 @@ export async function POST() {
 
     return Response.json({ id: session.id, url: session.url });
   } catch (error) {
-    logger.error('Checkout session creation failed', { error });
+    logger.error('Checkout session creation failed');
+    console.error('Checkout error:', error);
     return Response.json({
       error: 'Checkout error: Unable to create payment session'
     }, { status: 500 });
