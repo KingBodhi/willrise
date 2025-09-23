@@ -136,31 +136,31 @@ function HeroSection() {
           <div className="flex animate-marquee">
             {/* First set */}
             {CERT_LOGOS.map((src, i) => (
-              <div key={`set1-${i}`} className="flex-shrink-0 w-40 flex items-center justify-center">
-                <img 
-                  src={src} 
-                  alt="Certification logo" 
-                  className="h-16 md:h-20 w-auto" 
+              <div key={`set1-${i}`} className="flex-shrink-0 w-48 flex items-center justify-center px-8">
+                <img
+                  src={src}
+                  alt="Certification logo"
+                  className="h-16 md:h-20 w-auto"
                 />
               </div>
             ))}
             {/* Second set for seamless loop */}
             {CERT_LOGOS.map((src, i) => (
-              <div key={`set2-${i}`} className="flex-shrink-0 w-40 flex items-center justify-center">
-                <img 
-                  src={src} 
-                  alt="Certification logo" 
-                  className="h-16 md:h-20 w-auto" 
+              <div key={`set2-${i}`} className="flex-shrink-0 w-48 flex items-center justify-center px-8">
+                <img
+                  src={src}
+                  alt="Certification logo"
+                  className="h-16 md:h-20 w-auto"
                 />
               </div>
             ))}
             {/* Third set for extra smoothness */}
             {CERT_LOGOS.map((src, i) => (
-              <div key={`set3-${i}`} className="flex-shrink-0 w-40 flex items-center justify-center">
-                <img 
-                  src={src} 
-                  alt="Certification logo" 
-                  className="h-16 md:h-20 w-auto" 
+              <div key={`set3-${i}`} className="flex-shrink-0 w-48 flex items-center justify-center px-8">
+                <img
+                  src={src}
+                  alt="Certification logo"
+                  className="h-16 md:h-20 w-auto"
                 />
               </div>
             ))}

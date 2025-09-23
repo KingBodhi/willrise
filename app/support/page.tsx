@@ -7,10 +7,10 @@ const supportCategories = [
     description: "Step-by-step guides for proper harness fitting and system installation",
     icon: "🔧",
     links: [
-      { name: "Harness Fitting Guide", href: "/support/fitting-guide" },
-      { name: "Anchor Point Installation", href: "/support/anchor-points" },
-      { name: "System Inspection Checklist", href: "/support/inspection" },
-      { name: "Pre-Use Safety Check", href: "/support/pre-use-check" }
+      { name: "Harness Fitting Guide", href: "/blog/harness-fitting-guide" },
+      { name: "Anchor Point Installation", href: "/blog/anchor-point-installation" },
+      { name: "System Inspection Checklist", href: "/blog/system-inspection-checklist" },
+      { name: "Pre-Use Safety Check", href: "/blog/pre-use-safety-check" }
     ]
   },
   {
@@ -18,10 +18,10 @@ const supportCategories = [
     description: "Comprehensive training materials for safe equipment use",
     icon: "🎓",
     links: [
-      { name: "Safety Training Videos", href: "/support/training-videos" },
-      { name: "Certification Programs", href: "/support/certification" },
-      { name: "Train-the-Trainer Materials", href: "/support/trainer-resources" },
-      { name: "Safety Protocols", href: "/support/protocols" }
+      { name: "Safety Training Videos", href: "/blog/safety-training-videos" },
+      { name: "Certification Programs", href: "/blog/certification-programs" },
+      { name: "Train-the-Trainer Materials", href: "/blog/train-the-trainer-materials" },
+      { name: "Safety Protocols", href: "/blog/safety-protocols" }
     ]
   },
   {
@@ -29,10 +29,10 @@ const supportCategories = [
     description: "Keep your equipment in peak condition with proper maintenance",
     icon: "🛠️",
     links: [
-      { name: "Daily Inspection Guide", href: "/support/daily-inspection" },
-      { name: "Cleaning Instructions", href: "/support/cleaning" },
-      { name: "Storage Guidelines", href: "/support/storage" },
-      { name: "Retirement Criteria", href: "/support/retirement" }
+      { name: "Daily Inspection Guide", href: "/blog/daily-inspection-guide" },
+      { name: "Cleaning Instructions", href: "/blog/equipment-cleaning-instructions" },
+      { name: "Storage Guidelines", href: "/blog/equipment-storage-guidelines" },
+      { name: "Retirement Criteria", href: "/blog/equipment-retirement-criteria" }
     ]
   },
   {
@@ -40,10 +40,10 @@ const supportCategories = [
     description: "Get help from our safety experts and technical team",
     icon: "💬",
     links: [
-      { name: "Contact Technical Support", href: "/contact" },
-      { name: "Submit a Service Request", href: "/support/service-request" },
-      { name: "Warranty Claims", href: "/support/warranty-claims" },
-      { name: "Equipment Returns", href: "/support/returns" }
+      { name: "Contact Technical Support", href: "/blog/contact-technical-support" },
+      { name: "Submit a Service Request", href: "/blog/service-request-process" },
+      { name: "Warranty Claims", href: "/blog/warranty-claims-process" },
+      { name: "Equipment Returns", href: "/blog/equipment-returns-process" }
     ]
   }
 ];
