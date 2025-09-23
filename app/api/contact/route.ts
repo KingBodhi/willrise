@@ -1,5 +1,8 @@
-import { NextRequest } from 'next/server';
+import { NextRequest, NextResponse } from 'next/server';
 import nodemailer from 'nodemailer';
+import { withRateLimit } from '@/lib/with-rate-limit';
+import { withValidation } from '@/lib/validate';
+import { ContactSchema } from '@/lib/schemas';
 
 const transporter = nodemailer.createTransport({
   host: process.env.SMTP_HOST,
@@ -11,15 +14,9 @@ const transporter = nodemailer.createTransport({
   },
 });
 
-export async function POST(req: NextRequest) {
+async function handleContact(req: NextRequest & { validated: any }) {
   try {
-    const body = await req.json();
-    const { name, email, company, message } = body;
-    
-    // Validate required fields
-    if (!name || !email || !message) {
-      return new Response('Missing required fields', { status: 400 });
-    }
+    const { name, email, company, message } = req.validated;
 
     // Send email
     await transporter.sendMail({
@@ -37,11 +34,33 @@ export async function POST(req: NextRequest) {
       `,
     });
 
-    return Response.json({ ok: true });
+    const { loggers } = await import('@/lib/logger');
+    loggers.contact.info({
+      name,
+      email,
+      company: company || undefined,
+      ip: req.headers.get('x-forwarded-for') || 'unknown'
+    }, 'Contact form submitted successfully');
+
+    return NextResponse.json({ ok: true });
   } catch (error) {
-    console.error('Contact form error:', error);
-    return new Response('Failed to send message', { status: 500 });
+    const { loggers } = await import('@/lib/logger');
+    loggers.contact.error({
+      error: error instanceof Error ? error.message : 'Unknown error',
+      email: req.validated?.email,
+      ip: req.headers.get('x-forwarded-for') || 'unknown'
+    }, 'Contact form submission failed');
+    return NextResponse.json({ error: 'Failed to send message' }, { status: 500 });
   }
 }
 
+// Apply validation and rate limiting to contact endpoint
+const validatedHandler = withValidation(ContactSchema, 'body')(handleContact);
+const rateLimitedContact = withRateLimit({
+  maxRequests: 3,
+  windowMs: 60 * 60 * 1000, // 1 hour
+  message: 'Too many contact form submissions. Please try again in 1 hour.'
+})(validatedHandler);
+
+export const POST = rateLimitedContact;
 export const runtime = 'nodejs';
