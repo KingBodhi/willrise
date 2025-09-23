@@ -1,5 +1,5 @@
 datasource db {
-  provider = "postgresql"
+  provider = "sqlite"
   url      = env("DATABASE_URL")
 }
 
@@ -7,26 +7,12 @@ generator client {
   provider = "prisma-client-js"
 }
 
-enum Role {
-  ADMIN
-  EDITOR
-  CUSTOMER
-  DISTRIBUTOR
-}
-
-enum Status {
-  ACTIVE
-  INACTIVE
-  DRAFT
-  ARCHIVED
-}
-
 model User {
   id        String   @id @default(cuid())
   email     String   @unique
   name      String?
   password  String
-  role      Role     @default(EDITOR)
+  role      String   @default("EDITOR")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -37,7 +23,7 @@ model Collection {
   handle      String   @unique
   description String?
   heroImage   String?
-  status      Status   @default(ACTIVE)
+  status      String   @default("ACTIVE")
   products    CollectionProduct[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -48,7 +34,7 @@ model Product {
   title       String
   handle      String   @unique
   description String
-  status      Status   @default(ACTIVE)
+  status      String   @default("ACTIVE")
   metadata    String?  // JSON string
   images      ProductImage[]
   variants    Variant[]

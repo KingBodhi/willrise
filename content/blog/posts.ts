@@ -6,6 +6,8 @@ export type Post = {
   excerpt: string;
   image?: string;
   body: string; // HTML
+  category?: string;
+  readTime?: string;
 };
 
 export const posts: Post[] = [
@@ -15,6 +17,8 @@ export const posts: Post[] = [
     date: "2024-12-15",
     excerpt: "Why posture and pressure distribution matter during and after a fall.",
     image: "/images/blog/kinetic.svg",
+    category: "Technology",
+    readTime: "5 min read",
     body: `
       <h2>The Hidden Danger of Traditional Harnesses</h2>
       <p>Traditional fall protection harnesses have a critical flaw: while they successfully arrest falls, they can create life-threatening conditions during suspension. Concentrated strap pressures and compromised posture can lead to suspension trauma within minutes.</p>
@@ -39,11 +43,13 @@ export const posts: Post[] = [
     `
   },
   {
-    slug: "osha-fall-protection-guide", 
+    slug: "osha-fall-protection-guide",
     title: "OSHA Fall Protection Guidelines for Construction",
     date: "2024-11-20",
     excerpt: "Complete guide to OSHA compliance requirements for construction sites and fall protection systems.",
     image: "/images/blog/osha-guide.svg",
+    category: "Compliance",
+    readTime: "8 min read",
     body: `
       <h2>Understanding OSHA 1926.502 Requirements</h2>
       <p>The Occupational Safety and Health Administration (OSHA) has specific requirements for fall protection in construction, outlined in 29 CFR 1926.502. Understanding these requirements is essential for workplace safety compliance.</p>
@@ -90,10 +96,12 @@ export const posts: Post[] = [
   },
   {
     slug: "bench-protocol-overview",
-    title: "Bench Test Protocol Overview", 
+    title: "Bench Test Protocol Overview",
     date: "2024-10-30",
     excerpt: "A detailed look at our testing methodology and quality assurance processes.",
     image: "/images/blog/bench.svg",
+    category: "Testing",
+    readTime: "6 min read",
     body: `
       <h2>Our Testing Philosophy</h2>
       <p>At Willrise, safety isn't just about meeting standards—it's about exceeding them. Our comprehensive bench testing protocol ensures every harness performs reliably in real-world conditions.</p>
@@ -144,9 +152,11 @@ export const posts: Post[] = [
   {
     slug: "standards-landscape",
     title: "Safety Standards Landscape for Fall Protection",
-    date: "2024-10-15", 
+    date: "2024-10-15",
     excerpt: "Understanding the intersection of ANSI, OSHA, CSA, EN and other safety standards.",
     image: "/images/blog/standards.svg",
+    category: "Standards",
+    readTime: "7 min read",
     body: `
       <h2>Navigating the Standards Ecosystem</h2>
       <p>Fall protection equipment must comply with multiple overlapping standards depending on application, geography, and industry. Understanding this landscape is crucial for safety professionals.</p>
@@ -208,10 +218,12 @@ export const posts: Post[] = [
   },
   {
     slug: "suspension-trauma-prevention",
-    title: "Suspension Trauma Prevention Techniques", 
+    title: "Suspension Trauma Prevention Techniques",
     date: "2024-09-25",
     excerpt: "Learn about suspension trauma and how modern harness design prevents this life-threatening condition.",
     image: "/images/blog/suspension-trauma.svg",
+    category: "Safety Science",
+    readTime: "10 min read",
     body: `
       <h2>Understanding Suspension Trauma</h2>
       <p>Suspension trauma, also known as orthostatic intolerance or harness hang syndrome, is a potentially fatal condition that can occur when a person is suspended motionless in a harness.</p>
@@ -272,6 +284,8 @@ export const posts: Post[] = [
     date: "2024-09-10",
     excerpt: "Essential daily inspection procedures for fall protection equipment. Ensure your gear is ready when you need it most.",
     image: "/images/blog/inspection.svg",
+    category: "Best Practices",
+    readTime: "4 min read",
     body: `
       <h2>The Critical First Line of Defense</h2>
       <p>Pre-use inspection is the most important safety practice that costs nothing but can save lives. A systematic daily check ensures your fall protection equipment is ready when you need it most.</p>
