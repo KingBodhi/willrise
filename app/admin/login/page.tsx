@@ -22,7 +22,8 @@ export default function Page() {
       if (res.ok) {
         location.href = "/admin";
       } else {
-        setErr(await res.text() || "Login failed");
+        const errorData = await res.json().catch(() => ({ error: "Login failed" }));
+        setErr(errorData.error || "Login failed");
       }
     } catch {
       setErr("Network error occurred");

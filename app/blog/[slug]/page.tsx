@@ -1,9 +1,39 @@
 import Section from "../../../components/Section";
-import { getPost } from "../../../content/blog/posts";
 import Link from "next/link";
 
-export default function Page({ params }:{ params:{ slug:string }}){
-  const post = getPost(params.slug);
+type BlogPost = {
+  id: string;
+  title: string;
+  slug: string;
+  excerpt: string | null;
+  content: string;
+  category: string | null;
+  readTime: string | null;
+  featuredImage: string | null;
+  author: string;
+  publishedAt: string | null;
+  createdAt: string;
+};
+
+async function getPost(slug: string): Promise<BlogPost | null> {
+  try {
+    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL || 'http://localhost:3000'}/api/blog/${slug}`, {
+      cache: 'no-store'
+    });
+
+    if (!response.ok) {
+      return null;
+    }
+
+    return await response.json();
+  } catch (error) {
+    console.error('Error fetching post:', error);
+    return null;
+  }
+}
+
+export default async function Page({ params }:{ params:{ slug:string }}){
+  const post = await getPost(params.slug);
   if(!post) {
     return (
       <div className="bg-gradient-to-br from-neutral-50 to-white min-h-screen">
@@ -41,10 +71,10 @@ export default function Page({ params }:{ params:{ slug:string }}){
 
           <article className="card overflow-hidden">
             {/* Hero Image */}
-            {post.image && (
+            {post.featuredImage && (
               <div className="aspect-[21/9] bg-gradient-to-br from-primary-50 to-primary-100 relative overflow-hidden">
                 <img
-                  src={post.image}
+                  src={post.featuredImage}
                   alt={post.title}
                   className="w-full h-full object-cover"
                 />
@@ -64,8 +94,8 @@ export default function Page({ params }:{ params:{ slug:string }}){
                 {post.readTime && (
                   <span className="text-neutral-500 text-sm">{post.readTime}</span>
                 )}
-                {post.date && (
-                  <span className="text-neutral-500 text-sm">{post.date}</span>
+                {post.publishedAt && (
+                  <span className="text-neutral-500 text-sm">{new Date(post.publishedAt).toLocaleDateString()}</span>
                 )}
               </div>
 
@@ -76,7 +106,7 @@ export default function Page({ params }:{ params:{ slug:string }}){
 
               {/* Excerpt */}
               {post.excerpt && (
-                <p className="text-xl text-neutral-700 mb-8 leading-relaxed border-l-4 border-accent-500 pl-6">
+                <p className="text-xl text-neutral-800 mb-8 leading-relaxed border-l-4 border-accent-500 pl-6 font-medium">
                   {post.excerpt}
                 </p>
               )}
@@ -84,14 +114,19 @@ export default function Page({ params }:{ params:{ slug:string }}){
               {/* Article Body */}
               <div className="prose prose-lg prose-neutral max-w-none
                 prose-headings:font-display prose-headings:text-primary-600
-                prose-p:text-neutral-700 prose-p:leading-relaxed
+                prose-p:text-neutral-800 prose-p:leading-relaxed
                 prose-a:text-accent-500 prose-a:font-semibold hover:prose-a:text-accent-600
                 prose-strong:text-primary-600 prose-strong:font-semibold
-                prose-ul:text-neutral-700 prose-ol:text-neutral-700
+                prose-ul:text-neutral-800 prose-ol:text-neutral-800
+                prose-li:text-neutral-800
                 prose-blockquote:border-accent-500 prose-blockquote:text-primary-600
                 prose-code:bg-neutral-100 prose-code:text-accent-600 prose-code:px-2 prose-code:py-1 prose-code:rounded
+                prose-td:text-neutral-800 prose-th:text-primary-600
+                [&_.callout]:bg-primary-50 [&_.callout]:border-primary-200 [&_.callout]:text-neutral-800
+                [&_.warning]:bg-warning-50 [&_.warning]:border-warning-200 [&_.warning]:text-neutral-800
+                [&_.info]:bg-blue-50 [&_.info]:border-blue-200 [&_.info]:text-neutral-800
               "
-                dangerouslySetInnerHTML={{ __html: post.body }}
+                dangerouslySetInnerHTML={{ __html: post.content }}
               />
             </div>
           </article>
