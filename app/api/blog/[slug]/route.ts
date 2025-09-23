@@ -1,5 +1,4 @@
 import { prisma } from '@/lib/prisma';
-import { logger } from '@/lib/logger';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -24,7 +23,7 @@ export async function GET(request: Request, { params }: { params: { slug: string
 
     return Response.json(post);
   } catch (error) {
-    logger.error('Blog post fetch error', error);
+    console.error('Blog post fetch error:', error);
     return Response.json({ error: 'Failed to fetch blog post' }, { status: 500 });
   }
 }

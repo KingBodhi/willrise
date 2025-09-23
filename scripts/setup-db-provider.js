@@ -13,31 +13,9 @@ if (isProduction) {
     'provider = "postgresql"'
   );
 
-  // Add enums for PostgreSQL
-  const enumsDefinition = `
-enum Role {
-  ADMIN
-  EDITOR
-  CUSTOMER
-  DISTRIBUTOR
-}
+  // Enums are now defined directly in the schema file, no need to add them
 
-enum Status {
-  ACTIVE
-  INACTIVE
-  DRAFT
-  ARCHIVED
-}
-
-`;
-
-  // Insert enums after generator client
-  schema = schema.replace(
-    /(generator client \{[\s\S]*?\})/,
-    `$1\n${enumsDefinition}`
-  );
-
-  // Replace String types with enum types
+  // Replace String types with enum types (for backwards compatibility)
   schema = schema.replace(/role\s+String\s+@default\("EDITOR"\)/g, 'role Role @default(EDITOR)');
   schema = schema.replace(/status\s+String\s+@default\("ACTIVE"\)/g, 'status Status @default(ACTIVE)');
 

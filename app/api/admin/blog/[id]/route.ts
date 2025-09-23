@@ -1,6 +1,5 @@
 import { getSession } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
-import { logger } from '@/lib/logger';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -23,7 +22,7 @@ export async function GET(request: Request, { params }: { params: { id: string }
 
     return Response.json(post);
   } catch (error) {
-    logger.error('Blog post fetch error', error);
+    console.error('Blog post fetch error:', error);
     return Response.json({ error: 'Failed to fetch blog post' }, { status: 500 });
   }
 }
@@ -72,7 +71,7 @@ export async function PUT(request: Request, { params }: { params: { id: string }
       }
     });
 
-    logger.info('Blog post updated', {
+    console.log('Blog post updated:', {
       postId: post.id,
       title: post.title,
       updatedBy: session.email,
@@ -81,7 +80,7 @@ export async function PUT(request: Request, { params }: { params: { id: string }
 
     return Response.json(post);
   } catch (error) {
-    logger.error('Blog post update error', error);
+    console.error('Blog post update error:', error);
     return Response.json({ error: 'Failed to update blog post' }, { status: 500 });
   }
 }
@@ -98,14 +97,14 @@ export async function DELETE(request: Request, { params }: { params: { id: strin
       where: { id: params.id }
     });
 
-    logger.info('Blog post deleted', {
+    console.log('Blog post deleted:', {
       postId: params.id,
       deletedBy: session.email
     });
 
     return Response.json({ success: true });
   } catch (error) {
-    logger.error('Blog post deletion error', error);
+    console.error('Blog post deletion error:', error);
     return Response.json({ error: 'Failed to delete blog post' }, { status: 500 });
   }
 }

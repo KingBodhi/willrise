@@ -1,6 +1,5 @@
 import { getSession } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
-import { logger } from '@/lib/logger';
 
 export const runtime = 'nodejs';
 export const dynamic = 'force-dynamic';
@@ -19,7 +18,7 @@ export async function GET() {
 
     return Response.json(posts);
   } catch (error) {
-    logger.error('Blog posts fetch error', error);
+    console.error('Blog posts fetch error:', error);
     return Response.json({ error: 'Failed to fetch blog posts' }, { status: 500 });
   }
 }
@@ -65,7 +64,7 @@ export async function POST(request: Request) {
       }
     });
 
-    logger.info('Blog post created', {
+    console.log('Blog post created:', {
       postId: post.id,
       title: post.title,
       author: session.email,
@@ -74,7 +73,7 @@ export async function POST(request: Request) {
 
     return Response.json(post);
   } catch (error) {
-    logger.error('Blog post creation error', error);
+    console.error('Blog post creation error:', error);
     return Response.json({ error: 'Failed to create blog post' }, { status: 500 });
   }
 }
