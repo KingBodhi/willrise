@@ -1,59 +1,122 @@
 "use client";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import ImageUpload from '@/components/ImageUpload';
 
-export default function NewBlogPostPage() {
+type BlogPost = {
+  id: string;
+  title: string;
+  slug: string;
+  excerpt: string | null;
+  content: string;
+  category: string | null;
+  readTime: string | null;
+  featuredImage: string | null;
+  status: 'ACTIVE' | 'INACTIVE' | 'DRAFT' | 'ARCHIVED';
+  author: string;
+  publishedAt: string | null;
+  createdAt: string;
+};
+
+export default function EditBlogPostPage({ params }: { params: { id: string } }) {
   const router = useRouter();
-  const [loading, setLoading] = useState(false);
-  const [post, setPost] = useState({
-    title: '',
-    slug: '',
-    excerpt: '',
-    content: '',
-    category: '',
-    readTime: '',
-    status: 'DRAFT',
-    publishAt: ''
-  });
+  const [loading, setLoading] = useState(true);
+  const [saving, setSaving] = useState(false);
+  const [post, setPost] = useState<BlogPost | null>(null);
   const [featuredImage, setFeaturedImage] = useState<string[]>([]);
 
-  async function createPost() {
-    if (!post.title || !post.slug) {
+  useEffect(() => {
+    fetchBlogPost();
+  }, [params.id]);
+
+  async function fetchBlogPost() {
+    try {
+      const response = await fetch(`/api/admin/blog/${params.id}`);
+      if (response.ok) {
+        const postData = await response.json();
+        setPost(postData);
+        setFeaturedImage(postData.featuredImage ? [postData.featuredImage] : []);
+      } else {
+        console.error('Failed to fetch blog post');
+        router.push('/admin/blog');
+      }
+    } catch (error) {
+      console.error('Error fetching blog post:', error);
+      router.push('/admin/blog');
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function savePost() {
+    if (!post || !post.title || !post.slug) {
       alert('Please fill in required fields');
       return;
     }
 
-    setLoading(true);
+    setSaving(true);
     try {
-      const res = await fetch('/api/admin/blog', {
-        method: 'POST',
+      const response = await fetch(`/api/admin/blog/${params.id}`, {
+        method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           ...post,
           featuredImage: featuredImage[0] || null
         })
       });
-      
-      if (res.ok) {
-        const newPost = await res.json();
-        router.push(`/admin/blog/${newPost.id}`);
+
+      if (response.ok) {
+        const updatedPost = await response.json();
+        setPost(updatedPost);
+        alert('Blog post updated successfully!');
       } else {
-        alert('Failed to create blog post');
+        const error = await response.json();
+        alert(error.error || 'Failed to update blog post');
       }
     } catch (error) {
       alert('Network error');
     } finally {
-      setLoading(false);
+      setSaving(false);
     }
+  }
+
+  if (loading) {
+    return (
+      <div className="space-y-8">
+        <div className="flex items-center justify-center py-12">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto mb-4"></div>
+            <p className="text-neutral-600">Loading blog post...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (!post) {
+    return (
+      <div className="space-y-8">
+        <div className="text-center py-12">
+          <div className="text-4xl mb-4">❌</div>
+          <div className="font-semibold text-primary-600 mb-2">Blog post not found</div>
+          <div className="text-neutral-600 mb-4">The requested blog post could not be found.</div>
+          <Link
+            href="/admin/blog"
+            className="bg-primary-600 hover:bg-primary-700 text-white px-6 py-3 rounded-xl font-semibold transition-colors"
+          >
+            Back to Blog
+          </Link>
+        </div>
+      </div>
+    );
   }
 
   return (
     <div className="space-y-8">
       {/* Header */}
       <div className="flex items-center gap-4">
-        <Link 
+        <Link
           href="/admin/blog"
           className="p-2 hover:bg-neutral-100 rounded-lg transition-colors"
         >
@@ -62,8 +125,8 @@ export default function NewBlogPostPage() {
           </svg>
         </Link>
         <div>
-          <h1 className="font-display text-3xl font-bold text-primary-600">Create New Blog Post</h1>
-          <p className="text-neutral-600">Share safety insights and company updates</p>
+          <h1 className="font-display text-3xl font-bold text-primary-600">Edit Blog Post</h1>
+          <p className="text-neutral-600">Update safety insights and company content</p>
         </div>
       </div>
 
@@ -72,7 +135,7 @@ export default function NewBlogPostPage() {
         <div className="lg:col-span-2 space-y-6">
           <div className="bg-white rounded-2xl shadow-lg p-8 border border-neutral-200">
             <h2 className="font-display text-xl font-bold text-primary-600 mb-6">Post Content</h2>
-            
+
             <div className="space-y-6">
               <div>
                 <label className="block text-sm font-semibold text-primary-600 mb-2">
@@ -82,7 +145,7 @@ export default function NewBlogPostPage() {
                   type="text"
                   value={post.title}
                   onChange={(e) => setPost({
-                    ...post, 
+                    ...post,
                     title: e.target.value,
                     slug: e.target.value.toLowerCase().replace(/[^a-z0-9-]/g, '-')
                   })}
@@ -114,7 +177,7 @@ export default function NewBlogPostPage() {
                   Excerpt
                 </label>
                 <textarea
-                  value={post.excerpt}
+                  value={post.excerpt || ''}
                   onChange={(e) => setPost({...post, excerpt: e.target.value})}
                   placeholder="Brief description of the post..."
                   rows={3}
@@ -128,7 +191,7 @@ export default function NewBlogPostPage() {
                 </label>
                 <input
                   type="text"
-                  value={post.category}
+                  value={post.category || ''}
                   onChange={(e) => setPost({...post, category: e.target.value})}
                   placeholder="e.g. Technology, Safety, Training"
                   className="admin-input"
@@ -141,7 +204,7 @@ export default function NewBlogPostPage() {
                 </label>
                 <input
                   type="text"
-                  value={post.readTime}
+                  value={post.readTime || ''}
                   onChange={(e) => setPost({...post, readTime: e.target.value})}
                   placeholder="e.g. 5 min read"
                   className="admin-input"
@@ -173,7 +236,7 @@ export default function NewBlogPostPage() {
           {/* Publish Settings */}
           <div className="bg-white rounded-2xl shadow-lg p-6 border border-neutral-200">
             <h3 className="font-display text-lg font-bold text-primary-600 mb-4">Publish Settings</h3>
-            
+
             <div className="space-y-4">
               <div>
                 <label className="block text-sm font-semibold text-primary-600 mb-2">
@@ -181,7 +244,7 @@ export default function NewBlogPostPage() {
                 </label>
                 <select
                   value={post.status}
-                  onChange={(e) => setPost({...post, status: e.target.value})}
+                  onChange={(e) => setPost({...post, status: e.target.value as any})}
                   className="admin-select"
                 >
                   <option value="DRAFT">Draft</option>
@@ -196,13 +259,26 @@ export default function NewBlogPostPage() {
                 </label>
                 <input
                   type="datetime-local"
-                  value={post.publishAt}
-                  onChange={(e) => setPost({...post, publishAt: e.target.value})}
+                  value={post.publishedAt ? new Date(post.publishedAt).toISOString().slice(0, 16) : ''}
+                  onChange={(e) => setPost({...post, publishedAt: e.target.value ? new Date(e.target.value).toISOString() : null})}
                   className="admin-input"
                 />
                 <div className="text-sm text-neutral-500 mt-1">
                   Leave empty to publish immediately
                 </div>
+              </div>
+
+              <div>
+                <label className="block text-sm font-semibold text-primary-600 mb-2">
+                  Author
+                </label>
+                <input
+                  type="text"
+                  value={post.author}
+                  onChange={(e) => setPost({...post, author: e.target.value})}
+                  placeholder="Author name"
+                  className="admin-input"
+                />
               </div>
             </div>
           </div>
@@ -210,7 +286,7 @@ export default function NewBlogPostPage() {
           {/* Featured Image */}
           <div className="bg-white rounded-2xl shadow-lg p-6 border border-neutral-200">
             <h3 className="font-display text-lg font-bold text-primary-600 mb-4">Featured Image</h3>
-            
+
             <ImageUpload
               value={featuredImage}
               onChange={setFeaturedImage}
@@ -221,23 +297,20 @@ export default function NewBlogPostPage() {
             </div>
           </div>
 
-          {/* SEO */}
+          {/* Post Info */}
           <div className="bg-white rounded-2xl shadow-lg p-6 border border-neutral-200">
-            <h3 className="font-display text-lg font-bold text-primary-600 mb-4">SEO Settings</h3>
-            
-            <div className="space-y-4">
+            <h3 className="font-display text-lg font-bold text-primary-600 mb-4">Post Info</h3>
+
+            <div className="space-y-2 text-sm">
               <div>
-                <label className="block text-sm font-semibold text-primary-600 mb-2">
-                  Meta Description
-                </label>
-                <textarea
-                  placeholder="Brief description for search engines..."
-                  rows={3}
-                  className="admin-textarea"
-                />
-                <div className="text-sm text-neutral-500 mt-1">
-                  160 characters recommended
-                </div>
+                <span className="font-semibold text-primary-600">Created:</span>
+                <br />
+                {new Date(post.createdAt).toLocaleDateString()} at {new Date(post.createdAt).toLocaleTimeString()}
+              </div>
+              <div>
+                <span className="font-semibold text-primary-600">Post ID:</span>
+                <br />
+                <code className="text-xs bg-neutral-100 px-2 py-1 rounded">{post.id}</code>
               </div>
             </div>
           </div>
@@ -252,12 +325,19 @@ export default function NewBlogPostPage() {
         >
           Cancel
         </Link>
+        <Link
+          href={`/blog/${post.slug}`}
+          target="_blank"
+          className="border border-primary-600 text-primary-600 px-6 py-3 rounded-xl hover:bg-primary-50 transition-colors font-medium"
+        >
+          Preview
+        </Link>
         <button
-          onClick={createPost}
-          disabled={loading || !post.title || !post.slug}
+          onClick={savePost}
+          disabled={saving || !post.title || !post.slug}
           className="bg-accent-500 hover:bg-accent-600 disabled:bg-neutral-400 text-white px-6 py-3 rounded-xl font-semibold transition-colors disabled:cursor-not-allowed"
         >
-          {loading ? 'Creating...' : 'Create Post'}
+          {saving ? 'Saving...' : 'Save Changes'}
         </button>
       </div>
     </div>

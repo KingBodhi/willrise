@@ -7,12 +7,28 @@ generator client {
   provider = "prisma-client-js"
 }
 
+enum Role {
+  ADMIN
+  EDITOR
+  CUSTOMER
+  DISTRIBUTOR
+}
+
+enum Status {
+  ACTIVE
+  INACTIVE
+  DRAFT
+  ARCHIVED
+}
+
+
+
 model User {
   id        String   @id @default(cuid())
   email     String   @unique
   name      String?
   password  String
-  role      String   @default("EDITOR")
+  role Role @default(EDITOR)
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
@@ -23,7 +39,7 @@ model Collection {
   handle      String   @unique
   description String?
   heroImage   String?
-  status      String   @default("ACTIVE")
+  status Status @default(ACTIVE)
   products    CollectionProduct[]
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
@@ -34,7 +50,7 @@ model Product {
   title       String
   handle      String   @unique
   description String
-  status      String   @default("ACTIVE")
+  status Status @default(ACTIVE)
   metadata    String?  // JSON string
   images      ProductImage[]
   variants    Variant[]
@@ -129,4 +145,20 @@ model OrderItem {
   price     Int
   title     String
   sku       String
+}
+
+model BlogPost {
+  id           String   @id @default(cuid())
+  title        String
+  slug         String   @unique
+  excerpt      String?
+  content      String   // HTML content
+  category     String?
+  readTime     String?
+  featuredImage String?
+  status       Status   @default(DRAFT)
+  author       String   @default("WillRise Team")
+  publishedAt  DateTime?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
 }

@@ -1,49 +1,63 @@
 "use client";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
-const blogPosts = [
-  {
-    id: '1',
-    title: 'OSHA Fall Protection Guidelines for Construction',
-    slug: 'osha-fall-protection-guide',
-    status: 'PUBLISHED',
-    author: 'Safety Team',
-    publishedAt: '2024-01-15T10:00:00Z',
-    excerpt: 'Complete guide to OSHA fall protection requirements for construction sites...'
-  },
-  {
-    id: '2', 
-    title: 'Suspension Trauma Prevention Techniques',
-    slug: 'suspension-trauma-prevention',
-    status: 'PUBLISHED',
-    author: 'Dr. Sarah Mitchell',
-    publishedAt: '2024-01-10T14:30:00Z',
-    excerpt: 'Learn about suspension trauma and how modern harness design prevents it...'
-  },
-  {
-    id: '3',
-    title: 'Safety Standards Landscape Overview',
-    slug: 'standards-landscape',
-    status: 'DRAFT', 
-    author: 'Marcus Rodriguez',
-    publishedAt: null,
-    excerpt: 'Understanding the intersection of ANSI, OSHA, CSA, and EN standards...'
-  },
-  {
-    id: '4',
-    title: 'Bench Test Protocol Overview',
-    slug: 'bench-protocol-overview',
-    status: 'PUBLISHED',
-    author: 'Engineering Team',
-    publishedAt: '2024-01-08T09:15:00Z',
-    excerpt: 'A detailed look at our testing methodology and quality assurance...'
-  }
-];
+type BlogPost = {
+  id: string;
+  title: string;
+  slug: string;
+  excerpt: string | null;
+  status: 'ACTIVE' | 'INACTIVE' | 'DRAFT' | 'ARCHIVED';
+  author: string;
+  publishedAt: string | null;
+  createdAt: string;
+};
 
 export default function BlogPage() {
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState('ALL');
+  const [blogPosts, setBlogPosts] = useState<BlogPost[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchBlogPosts();
+  }, []);
+
+  async function fetchBlogPosts() {
+    try {
+      const response = await fetch('/api/admin/blog');
+      if (response.ok) {
+        const posts = await response.json();
+        setBlogPosts(posts);
+      } else {
+        console.error('Failed to fetch blog posts');
+      }
+    } catch (error) {
+      console.error('Error fetching blog posts:', error);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function deleteBlogPost(id: string) {
+    if (!confirm('Are you sure you want to delete this blog post?')) {
+      return;
+    }
+
+    try {
+      const response = await fetch(`/api/admin/blog/${id}`, {
+        method: 'DELETE'
+      });
+
+      if (response.ok) {
+        setBlogPosts(posts => posts.filter(post => post.id !== id));
+      } else {
+        alert('Failed to delete blog post');
+      }
+    } catch (error) {
+      alert('Error deleting blog post');
+    }
+  }
 
   const filteredPosts = blogPosts.filter(post => {
     const matchesSearch = post.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -51,6 +65,19 @@ export default function BlogPage() {
     const matchesStatus = statusFilter === 'ALL' || post.status === statusFilter;
     return matchesSearch && matchesStatus;
   });
+
+  if (loading) {
+    return (
+      <div className="space-y-8">
+        <div className="flex items-center justify-center py-12">
+          <div className="text-center">
+            <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-primary-600 mx-auto mb-4"></div>
+            <p className="text-neutral-600">Loading blog posts...</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-8">
@@ -76,9 +103,9 @@ export default function BlogPage() {
         </div>
         <div className="bg-white rounded-2xl shadow-lg p-6 border border-neutral-200">
           <div className="text-3xl font-bold text-success-600 mb-2">
-            {blogPosts.filter(p => p.status === 'PUBLISHED').length}
+            {blogPosts.filter(p => p.status === 'ACTIVE').length}
           </div>
-          <div className="text-neutral-600">Published</div>
+          <div className="text-neutral-600">Active</div>
         </div>
         <div className="bg-white rounded-2xl shadow-lg p-6 border border-neutral-200">
           <div className="text-3xl font-bold text-warning-600 mb-2">
@@ -112,7 +139,7 @@ export default function BlogPage() {
             className="admin-select w-auto"
           >
             <option value="ALL">All Status</option>
-            <option value="PUBLISHED">Published</option>
+            <option value="ACTIVE">Active</option>
             <option value="DRAFT">Draft</option>
             <option value="ARCHIVED">Archived</option>
           </select>
@@ -150,8 +177,8 @@ export default function BlogPage() {
                   </td>
                   <td className="px-6 py-4">
                     <span className={`px-3 py-1 rounded-full text-sm font-semibold ${
-                      post.status === 'PUBLISHED' 
-                        ? 'bg-success-100 text-success-700' 
+                      post.status === 'ACTIVE'
+                        ? 'bg-success-100 text-success-700'
                         : post.status === 'DRAFT'
                         ? 'bg-warning-100 text-warning-700'
                         : 'bg-neutral-100 text-neutral-700'
@@ -179,7 +206,10 @@ export default function BlogPage() {
                       >
                         View
                       </Link>
-                      <button className="text-danger-600 hover:text-danger-700 font-medium">
+                      <button
+                        onClick={() => deleteBlogPost(post.id)}
+                        className="text-danger-600 hover:text-danger-700 font-medium"
+                      >
                         Delete
                       </button>
                     </div>
