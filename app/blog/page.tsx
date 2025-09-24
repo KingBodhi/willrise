@@ -19,10 +19,8 @@ type BlogPost = {
 
 async function getBlogPosts(): Promise<BlogPost[]> {
   try {
-    // In production, use relative URLs; in development, use full localhost URL
-    const baseUrl = process.env.NODE_ENV === 'production'
-      ? process.env.NEXT_PUBLIC_BASE_URL || ''
-      : 'http://localhost:3001';
+    // Use relative URLs in production, full URL in development
+    const baseUrl = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:3001';
     const response = await fetch(`${baseUrl}/api/blog`, {
       cache: 'no-store'
     });
