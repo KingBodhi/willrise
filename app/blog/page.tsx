@@ -19,8 +19,15 @@ type BlogPost = {
 
 async function getBlogPosts(): Promise<BlogPost[]> {
   try {
-    // Use relative URLs in production, full URL in development
-    const baseUrl = process.env.NODE_ENV === 'production' ? '' : 'http://localhost:3001';
+    // Server-side: use full URL in production, localhost in development
+    // Client-side: use relative URLs
+    const isServer = typeof window === 'undefined';
+    const baseUrl = isServer
+      ? (process.env.NODE_ENV === 'production'
+          ? 'https://willrise.vercel.app'
+          : 'http://localhost:3001')
+      : '';
+
     const response = await fetch(`${baseUrl}/api/blog`, {
       cache: 'no-store'
     });
