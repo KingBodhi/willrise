@@ -20,7 +20,7 @@ const supportCategories = [
     links: [
       { name: "Safety Training Videos", href: "/blog/safety-training-videos" },
       { name: "Certification Programs", href: "/blog/certification-programs" },
-      { name: "Train-the-Trainer Materials", href: "/blog/train-the-trainer-materials" },
+      { name: "Trainer Resources", href: "/blog/trainer-resources" },
       { name: "Safety Protocols", href: "/blog/safety-protocols" }
     ]
   },
@@ -30,9 +30,9 @@ const supportCategories = [
     icon: "🛠️",
     links: [
       { name: "Daily Inspection Guide", href: "/blog/daily-inspection-guide" },
-      { name: "Cleaning Instructions", href: "/blog/equipment-cleaning-instructions" },
-      { name: "Storage Guidelines", href: "/blog/equipment-storage-guidelines" },
-      { name: "Retirement Criteria", href: "/blog/equipment-retirement-criteria" }
+      { name: "Cleaning Instructions", href: "/blog/cleaning-instructions" },
+      { name: "Storage Guidelines", href: "/blog/storage-guidelines" },
+      { name: "Equipment Retirement Criteria", href: "/blog/equipment-retirement-criteria" }
     ]
   },
   {
@@ -42,8 +42,8 @@ const supportCategories = [
     links: [
       { name: "Contact Technical Support", href: "/blog/contact-technical-support" },
       { name: "Submit a Service Request", href: "/blog/service-request-process" },
-      { name: "Warranty Claims", href: "/blog/warranty-claims-process" },
-      { name: "Equipment Returns", href: "/blog/equipment-returns-process" }
+      { name: "Warranty Claims Process", href: "/blog/warranty-claims-process" },
+      { name: "Equipment Returns Process", href: "/blog/equipment-returns-process" }
     ]
   }
 ];
