@@ -1,6 +1,42 @@
 import Section from "../components/Section";
 import Link from "next/link";
 
+type BlogPost = {
+  id: string;
+  title: string;
+  slug: string;
+  excerpt: string | null;
+  featuredImage: string | null;
+  publishedAt: string | null;
+};
+
+async function getHomepageBlogPosts(): Promise<BlogPost[]> {
+  try {
+    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || (typeof window !== 'undefined' ? '' : 'http://localhost:3001');
+    const response = await fetch(`${baseUrl}/api/blog`, {
+      cache: 'no-store'
+    });
+
+    if (!response.ok) {
+      console.error('Failed to fetch blog posts:', response.statusText);
+      return [];
+    }
+
+    const posts = await response.json();
+
+    // Get featured post (kinetic fall arrest) and 2 most recent other posts
+    const featuredPost = posts.find((post: BlogPost) => post.slug === 'introducing-kinetic-fall-arrest');
+    const recentPosts = posts
+      .filter((post: BlogPost) => post.slug !== 'introducing-kinetic-fall-arrest')
+      .slice(0, 2);
+
+    return featuredPost ? [featuredPost, ...recentPosts] : posts.slice(0, 3);
+  } catch (error) {
+    console.error('Error fetching homepage blog posts:', error);
+    return [];
+  }
+}
+
 const TRUST_INDICATORS = [
   { icon: "🏗️", text: "Protecting Job Sites Worldwide" },
   { icon: "⚡", text: "Ships Within 24 Hours" },
@@ -325,7 +361,8 @@ function FeaturedProduct() {
   );
 }
 
-export default function Page(){
+export default async function Page(){
+  const blogPosts = await getHomepageBlogPosts();
   return (
     <>
       <HeroSection />
@@ -427,68 +464,36 @@ export default function Page(){
           </div>
           
           <div className="grid md:grid-cols-3 gap-8">
-            <Link href="/blog/introducing-kinetic-fall-arrest" className="group bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-neutral-200">
-              <div className="aspect-[16/9] bg-gradient-to-br from-primary-50 to-primary-100 relative overflow-hidden">
-                <img src="/images/blog/kinetic.svg" alt="Kinetic Fall-Arrest System" className="w-full h-full object-cover"/>
-                <div className="absolute top-4 left-4 bg-primary-600 text-white px-3 py-1 rounded-full text-sm font-bold">
-                  Featured
+            {blogPosts.map((post, index) => (
+              <Link key={post.id} href={`/blog/${post.slug}`} className="group bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-neutral-200">
+                <div className="aspect-[16/9] bg-gradient-to-br from-primary-50 to-primary-100 relative overflow-hidden">
+                  <img
+                    src={post.featuredImage || "/images/blog/placeholder.svg"}
+                    alt={post.title}
+                    className="w-full h-full object-cover"
+                  />
+                  {index === 0 && (
+                    <div className="absolute top-4 left-4 bg-primary-600 text-white px-3 py-1 rounded-full text-sm font-bold">
+                      Featured
+                    </div>
+                  )}
                 </div>
-              </div>
-              <div className="p-8">
-                <h3 className="font-display text-xl font-bold text-primary-600 mb-3 group-hover:text-accent-500 transition-colors">
-                  Introducing the Kinetic Fall-Arrest System
-                </h3>
-                <p className="text-neutral-700 mb-4 leading-relaxed">
-                  Why posture and pressure distribution matter during and after a fall.
-                </p>
-                <div className="flex items-center text-accent-500 font-bold">
-                  Read Article
-                  <svg className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                  </svg>
+                <div className="p-8">
+                  <h3 className="font-display text-xl font-bold text-primary-600 mb-3 group-hover:text-accent-500 transition-colors">
+                    {post.title}
+                  </h3>
+                  <p className="text-neutral-700 mb-4 leading-relaxed">
+                    {post.excerpt}
+                  </p>
+                  <div className="flex items-center text-accent-500 font-bold">
+                    Read Article
+                    <svg className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                    </svg>
+                  </div>
                 </div>
-              </div>
-            </Link>
-            
-            <Link href="/blog/bench-protocol-overview" className="group bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-neutral-200">
-              <div className="aspect-[16/9] bg-gradient-to-br from-accent-50 to-accent-100 relative overflow-hidden">
-                <img src="/images/blog/bench.svg" alt="Test Protocol" className="w-full h-full object-cover"/>
-              </div>
-              <div className="p-8">
-                <h3 className="font-display text-xl font-bold text-primary-600 mb-3 group-hover:text-accent-500 transition-colors">
-                  Bench Test Protocol Overview
-                </h3>
-                <p className="text-neutral-700 mb-4 leading-relaxed">
-                  A high-level look at our test rigs and measurement approach.
-                </p>
-                <div className="flex items-center text-accent-500 font-bold">
-                  Read Article
-                  <svg className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                  </svg>
-                </div>
-              </div>
-            </Link>
-            
-            <Link href="/blog/standards-landscape" className="group bg-white rounded-2xl shadow-lg hover:shadow-xl transition-all duration-300 overflow-hidden border border-neutral-200">
-              <div className="aspect-[16/9] bg-gradient-to-br from-success-50 to-success-100 relative overflow-hidden">
-                <img src="/images/blog/standards.svg" alt="Safety Standards" className="w-full h-full object-cover"/>
-              </div>
-              <div className="p-8">
-                <h3 className="font-display text-xl font-bold text-primary-600 mb-3 group-hover:text-accent-500 transition-colors">
-                  Standards Landscape for Fall Protection
-                </h3>
-                <p className="text-neutral-700 mb-4 leading-relaxed">
-                  Where ANSI, OSHA, CSA, EN and others intersect.
-                </p>
-                <div className="flex items-center text-accent-500 font-bold">
-                  Read Article
-                  <svg className="w-5 h-5 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
-                  </svg>
-                </div>
-              </div>
-            </Link>
+              </Link>
+            ))}
           </div>
         </div>
       </Section>
