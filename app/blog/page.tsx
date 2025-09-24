@@ -1,6 +1,9 @@
 import Section from "../../components/Section";
 import Link from "next/link";
 
+// Force dynamic rendering for blog pages
+export const dynamic = 'force-dynamic';
+
 type BlogPost = {
   id: string;
   title: string;
@@ -16,7 +19,10 @@ type BlogPost = {
 
 async function getBlogPosts(): Promise<BlogPost[]> {
   try {
-    const baseUrl = process.env.NEXT_PUBLIC_BASE_URL || (typeof window !== 'undefined' ? '' : 'http://localhost:3001');
+    // In production, use relative URLs; in development, use full localhost URL
+    const baseUrl = process.env.NODE_ENV === 'production'
+      ? process.env.NEXT_PUBLIC_BASE_URL || ''
+      : 'http://localhost:3001';
     const response = await fetch(`${baseUrl}/api/blog`, {
       cache: 'no-store'
     });
