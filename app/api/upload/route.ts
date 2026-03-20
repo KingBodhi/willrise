@@ -1,27 +1,18 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { writeFile } from 'fs/promises';
-import { join } from 'path';
-import { existsSync, mkdirSync } from 'fs';
+import { put } from '@vercel/blob';
 import { getSession } from '@/lib/auth';
 import { withRateLimit } from '@/lib/with-rate-limit';
 
 async function handleUpload(request: NextRequest) {
-  // Authentication check
   const session = await getSession();
   if (!session) {
-    return NextResponse.json(
-      { error: 'Authentication required' },
-      { status: 401 }
-    );
+    return NextResponse.json({ error: 'Authentication required' }, { status: 401 });
   }
 
-  // Authorization check - only ADMIN and EDITOR can upload
   if (!['ADMIN', 'EDITOR'].includes(session.role)) {
-    return NextResponse.json(
-      { error: 'Insufficient permissions' },
-      { status: 403 }
-    );
+    return NextResponse.json({ error: 'Insufficient permissions' }, { status: 403 });
   }
+
   try {
     const data = await request.formData();
     const file: File | null = data.get('file') as unknown as File;
@@ -30,9 +21,8 @@ async function handleUpload(request: NextRequest) {
       return NextResponse.json({ error: 'No file received' }, { status: 400 });
     }
 
-    // Enhanced file validation
     const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp', 'image/gif'];
-    const MAX_SIZE = 5 * 1024 * 1024; // 5MB max
+    const MAX_SIZE = 5 * 1024 * 1024; // 5MB
 
     if (!ALLOWED_TYPES.includes(file.type)) {
       return NextResponse.json({
@@ -46,31 +36,16 @@ async function handleUpload(request: NextRequest) {
       }, { status: 400 });
     }
 
-    const bytes = await file.arrayBuffer();
-    const buffer = Buffer.from(bytes);
-
-    // Create upload directory if it doesn't exist
-    const uploadsDir = join(process.cwd(), 'public', 'uploads');
-    if (!existsSync(uploadsDir)) {
-      mkdirSync(uploadsDir, { recursive: true });
-    }
-
-    // Generate unique filename
     const timestamp = Date.now();
     const originalName = file.name.replace(/[^a-zA-Z0-9.-]/g, '_');
-    const filename = `${timestamp}-${originalName}`;
-    const filepath = join(uploadsDir, filename);
+    const filename = `uploads/${timestamp}-${originalName}`;
 
-    // Save file
-    await writeFile(filepath, buffer);
+    const blob = await put(filename, file, { access: 'public' });
 
-    // Return public URL
-    const publicUrl = `/uploads/${filename}`;
-    
-    return NextResponse.json({ 
+    return NextResponse.json({
       message: 'File uploaded successfully',
-      url: publicUrl,
-      filename 
+      url: blob.url,
+      filename: blob.pathname
     });
 
   } catch (error) {
@@ -84,10 +59,9 @@ async function handleUpload(request: NextRequest) {
   }
 }
 
-// Apply rate limiting to upload endpoint
 const rateLimitedUpload = withRateLimit({
   maxRequests: 10,
-  windowMs: 60 * 1000, // 1 minute
+  windowMs: 60 * 1000,
   message: 'Upload rate limit exceeded. Please wait before uploading more files.'
 });
 
